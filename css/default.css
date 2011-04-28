@@ -1,0 +1,440 @@
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after,
+q:before, q:after { content: ''; content: none; }
+ins { background-color: #ff9; color: #000; text-decoration: none; }
+mark { background-color: #ff9; color: #000; font-style: italic; font-weight: bold; }
+del { text-decoration: line-through; }
+abbr[title], dfn[title] { border-bottom: 1px dotted; cursor: help; }
+table { border-collapse: collapse; border-spacing: 0; }
+hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
+input, select { vertical-align: middle; }
+
+body { font:13px/1.231 sans-serif; *font-size:small; } 
+select, input, textarea, button { font:99% sans-serif; }
+pre, code, kbd, samp { font-family: monospace, sans-serif; }
+
+html { overflow-y: scroll; }
+a:hover, a:active { outline: none; }
+ul, ol { margin-left: 2em; }
+ol { list-style-type: decimal; }
+nav ul, nav li { margin: 0; list-style:none; list-style-image: none; }
+small { font-size: 85%; }
+strong, th { font-weight: bold; }
+td { vertical-align: top; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 15px; }
+textarea { overflow: auto; }
+.browserIE6 legend, .browserIE7 legend { margin-left: -7px; } 
+input[type="radio"] { vertical-align: text-bottom; }
+input[type="checkbox"] { vertical-align: bottom; }
+.browserIE7 input[type="checkbox"] { vertical-align: baseline; }
+.browserIE6 input { vertical-align: text-bottom; }
+label, input[type="button"], input[type="submit"], input[type="image"], button { cursor: pointer; }
+button, input, select, textarea { margin: 0; }
+input:valid, textarea:valid   {  }
+input:invalid, textarea:invalid { }
+.no-boxshadow input:invalid, .no-boxshadow textarea:invalid { }
+
+::-moz-selection { background: #000; color:#fff; text-shadow: none; }
+::selection { background:#000; color:#fff; text-shadow: none; }
+a:link { -webkit-tap-highlight-color: #FF5E99; }
+
+button { width: auto; overflow: visible; }
+.browserIE7 img { -ms-interpolation-mode: bicubic; }
+
+body, select, input, textarea { color:#000; }
+h1, h2, h3, h4, h5, h6 { font-weight:bold; }
+a, a:active, a:visited { color: #666666; }
+a:hover { color: #000; }
+
+
+/* *********
+   DEFAULTS
+********** */
+
+h1, h2, h3 { }
+
+p, ul { margin-bottom:14px; color:#666666; }
+ul ul { margin-bottom:0px; }
+
+html, body { height:100%; overflow:hidden; }
+body { background-color:#e8e8e8; margin:0px 24px 24px 24px; }
+
+#container {
+position:relative;
+height:100%;
+margin-top:-48px;
+background-color:#fff;
+}
+#main {
+margin-top:48px;
+background-color:#f4f4f4;
+height:50%;
+border:1px solid red;
+}
+
+#frontpage { position:absolute; top:50%; left:50%; width:830px; height:420px; margin:-110px 0 0 -415px; text-align:center; }
+
+.input { 
+width:181px;
+height:20px;
+padding:13px 18px 13px 18px;
+border:1px solid #909090; border-radius:0px; -moz-box-shadow:-2px 2px 0px #909090; -webkit-box-shadow:-2px 2px 0px #909090; box-shadow:-2px 2px 0px #909090;
+font-size:18px;
+}
+
+#logind, #chooselist { width:425px; float:left; text-align:left; margin-top:80px; } 
+	#logind  em, #chooselist em { width:100px; float:left; text-align:right; color:#909090; font-size:12px; margin-right:15px; padding-top:9px; }
+	#accountname { background:url("../gfx/twitter-login.gif") no-repeat 16px 13px; padding:13px 18px 13px 109px; margin-bottom:8px; }
+	#accountpassword { width:219px; }
+
+#chooselist { width:385px;margin-left:20px;} 
+	#chooselist em { width:50px; }
+	#chooselist.disabled #disabled { z-index:20; position:absolute; margin-left:65px; background-color:#999; width:282px; height:46px; opacity:.3; }
+	#listitem {
+	width:280px;
+	padding:13px 18px 13px 18px;
+	border:1px solid #909090;
+	}
+	
+#message { clear:both; border:1px solid #C96; padding:14px; width:280px; margin:0 auto; margin:20px 0 0 114px; float:left; }
+	#message p { padding:0; margin:0; color:red; font-weight:800;  }
+
+.submit {
+width:48px;
+height:48px;
+background:url("../gfx/button-submit-off.gif") no-repeat;
+border:none;
+}
+	.submit:hover { background-image:url("../gfx/button-submit-hover.gif"); }
+
+/* *********
+   STYLES
+********** */
+header {
+position:relative; 
+height:24px;
+background-color:#e8e8e8;
+z-index:1;
+}
+
+#article { position:relative; width:520px; float:left; padding:22px 0px 15px 0px; background-color:#FFF; }
+	#article .padding { padding:0px 10px 20px 20px; }
+
+#contentarea { overflow:hidden; margin-top:48px; background-color:#f4f4f4; }
+iframe { height:100%; width:100%; }
+
+/* *********
+   FOOTER 196px
+********** */
+footer {
+position:absolute;
+bottom:0px;
+margin:0 auto;
+height:220px;
+background-color:#e8e8e8;
+width:100%;
+clear:both;
+}
+	footer button { border:0; height:49px; width:49px; display:block; margin:71px 7px 0 0; padding:0; float:left; 
+background:url("../gfx/button-square.gif") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
+	footer button:hover { background:url("../gfx/button-square-hover.gif"); color:#fff; text-shadow:none; }
+
+	footer button.buttonnext { width:145px; margin-left:21px; background:url("../gfx/button-left.gif") no-repeat; text-align:right; padding-right:16px; }
+	footer button.buttonnext:hover { background:url("../gfx/button-left-hover.gif"); }
+	
+	footer button.buttonprevious { float:right; width:150px; height:50px; background:url("../gfx/button-right.gif") no-repeat; text-align:left; padding-left:16px; margin-right:25px; }
+	footer button.buttonprevious:hover { background:url("../gfx/button-right-hover.gif"); color:#fff; text-shadow:none; }
+
+	a:link 		{ text-decoration:none; }
+	a:visited 	{ text-decoration:none; }
+	a:hover 	{ text-decoration:none; }
+	a:active 	{ text-decoration:none; }
+	
+	footer .left 	{width:300px;float:left;padding:6px 0 0 19px;}
+	footer .right 	{width:600px;float:right;text-align:right; padding:6px 24px 0 0;}
+	footer p 		{color:#999; }
+
+	.tweet	{ position:absolute; left:50%; margin-left:-225px; width:492px; padding:23px 0px 0px 88px; }
+	#contentarea .tweet { position:relative; }
+	footer .tweet { padding-top:48px; margin-left:-233px;}
+	.tweet img { position:absolute; left:0px; top:45px; }
+	.tweet p { margin:0; padding:0; text-shadow:0px 1px 0px #fff; }
+	.tweet p.name { color:#000; font-size:12px; margin-bottom:6px; }
+	.tweet p.text { color:#666; font-size:18px; line-height:22px; }
+	.tweet p.urls { margin-bottom:7px; font-size:18px; }
+	.tweet p.datetime { font-size:10px; margin-bottom:10px; }
+	.tweet .url	{ color:#b0b0b0; }
+	.tweet .url2	{ color:#00af97; }
+	
+	.tweet.big	{ position:absolute; left:50%; margin-left:-300px; width:692px; }
+	.tweet.big p.text { font-size:36px; line-height:38px; }
+	.tweet.big p.urls { margin-bottom:7px; font-size:36px; }
+
+
+/* *********
+	MENU
+********** */
+/* remove all list stylings */
+nav#menu  	{
+position:absolute;
+right:0px;
+height:24px;
+top:-24px;
+z-index:100;
+}
+.menu, .menu ul {
+	margin:0px 0 0 0;
+	padding:0;
+	border:0;
+	list-style-type: none;
+	display:block;
+}
+
+.menu li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	display: block;
+	float: left;
+	position: relative;	/* position each LI, thus creating potential IE.win overlap problem */
+	z-index:50;		/* thus we need to apply explicit z-index here... */
+}
+
+.menu li:hover {
+	z-index: 10000;	/* ...and here. this makes sure active item is always above anything else in the menu */
+	white-space: normal;/* required to resolve IE7 :hover bug (z-index above is ignored if this is not present)
+							see http://www.tanfa.co.uk/css/articles/pure-css-popups-bug.asp for other stuff that work */
+}
+
+.menu li li {
+float: none;
+}
+
+.menu ul {
+visibility: hidden;
+position: absolute;
+z-index: 10;
+left: 0;
+top: 0;
+}
+
+.menu li:hover>ul {
+	visibility: visible;	/* display submenu them on hover */
+	top: 100%;	/* 1st level go below their parent item */
+}
+
+.menu li li:hover>ul {	/* 2nd+ levels go on the right side of the parent item */
+	top: 0;
+	left: 100%;
+}
+
+/* -- float.clear --
+	force containment of floated LIs inside of UL */
+.menu:after, .menu ul:after {
+	content: ".";
+	height: 0;
+	display: block;
+	visibility: hidden;
+	overflow: hidden;
+	clear: both;
+}
+.menu, .menu ul {	/* IE7 float clear: */
+	min-height: 0;
+}
+/* -- float.clear.END --  */
+
+/* -- sticky.submenu --
+	it should not disappear when your mouse moves a bit outside the submenu
+	YOU SHOULD NOT STYLE the background of the ".menu UL" or this feature may not work properly!
+	if you do it, make sure you 110% know what you do */
+.menu ul {
+	background-image: url("../gfx/blank.gif");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
+	padding: 0px 0px 30px 30px;
+	margin: 0px 0 0 -30px;
+	/*background: #f00;	*//* uncomment this if you want to see the "safe" area.
+								you can also use to adjust the safe area to your requirement */
+}
+.menu ul ul {
+	padding: 30px 30px 30px 10px;
+	margin: -30px 0 0 -10px;
+}
+/* -- sticky.submenu.END -- */
+
+
+
+
+
+
+/* - - - DESIGN styles - - - */
+.menu, .menu ul li { }
+.menu ul 	{ text-align:left; }
+
+.menu a, .menu a:link, .menu a:visited, .menu a:hover, .menu a:active  {
+	white-space:nowrap;
+	display:block;
+	position:relative;
+	text-decoration:none;
+	text-align:left;
+	color:#666;
+	font-weight:200;
+	font-size:10px;
+	outline:none;
+	line-height:22px;
+	padding-top:0px;
+	padding-bottom:0px;
+	padding-left:10px;
+	padding-right:10px;
+	margin:0px;
+}
+
+.menu a:hover, .menu li:hover>a {
+	color:#666;
+	cursor:pointer;
+	text-decoration:none;
+}
+
+.menu a:hover { color: #000;text-decoration:none; }
+
+.menu li li {	/* create borders around each item */
+	border-top:0px;
+	left:-1px;
+	min-width:156px;
+	background-color:#fff;
+}
+.menu li li a, .menu li li a:link, .menu li li a:visited, .menu li li a:hover, .menu li li a:active  {
+	text-decoration: none;
+	color:#909090;
+	padding:0px 10px;
+	font-size:10px;
+	line-height:18px;
+	letter-spacing:0;
+	border-left:1px solid #909090;
+	border-right:1px solid #909090;
+	background-color:#fff;
+}
+.menu li li a:hover {
+	color:#000;
+	background-color:#e4ffec;
+}
+
+.menu ul>li + li {	/* and remove the top border on all but first item in the list */
+	border-top:0px;
+}
+
+.menu li li:hover>ul {	/* inset 2nd+ submenus, to show off overlapping */
+	top:5px;
+	left:90%;
+}
+.menu .toplevel {
+	height:24px;
+	text-align:center;
+	border-left:1px solid #e8e8e8;
+	border-right:1px solid #fff;
+	display:table-cell;
+	vertical-align:middle;
+}
+
+.menu .item3>a:first-child, .menu .item4>a:first-child, .menu .item5>a:first-child {
+}
+.menu .item1 a, .menu .item1 a:link, .menu .item1 a:visited, .menu .item1 a:hover, .menu .item1 a:active  {
+border-left:0px;
+}
+
+.menu .item1 { width:250px; border:0px; }
+.menu .item1 a { text-align:right; }
+.menu .item2 { width:60px; }
+	.menu li.item2 li:last-child { border-bottom:1px solid #909090; z-index:100; }
+	.menu .item2:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+.menu .item3 { width:55px; background-color:#fff; }
+	.menu .item3:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+.menu .item4 { width:105px; }
+	.menu .item4:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+	.menu li.item4 li { margin-left:-49px; }
+	.menu li.item4 li:last-child { border-bottom:1px solid #909090;}
+
+.menu .item2, .menu .item4 { background:url("../gfx/icon-arrow-down.gif") right 10px no-repeat #fff; }
+
+
+
+.menu .item2 ul>li:first-child a { padding-top:5px; background:url("../gfx/submenu-digital.gif") 0px -36px no-repeat #fff;  }
+.menu .item2 ul>li:first-child a:hover { background-position:0px 0px; }
+
+.menu .item4 ul>li:first-child a { padding-top:5px; background:url("../gfx/submenu-slideshow.gif") 0px -36px no-repeat #fff;  }
+.menu .item4 ul>li:first-child a:hover { background-position:0px 0px; }
+
+/* Fix for IE5/Mac \*//*/
+.menu a {
+	float: left;
+}
+/* End Fix */
+
+
+
+
+
+.ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
+.hidden { display: none; visibility: hidden; }
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+.invisible { visibility: hidden; }
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+
+@media all and (orientation:portrait) {
+
+}
+
+@media all and (orientation:landscape) {
+
+}
+
+@media screen and (max-device-width: 480px) {
+
+  /* html { -webkit-text-size-adjust:none; -ms-text-size-adjust:none; } */
+}
+
+
+@media print {
+  * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important;
+  -ms-filter: none !important; } 
+  a, a:visited { color: #444 !important; text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr, img { page-break-inside: avoid; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3{ page-break-after: avoid; }
+}

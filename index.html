@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Sweetshow</title>
+        <meta name="description" content="Flip through your tweets as a slideshow">
+        <meta name="keywords" content="twitter slideshow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" href="css/jquery.nucombo.css">
+        <script src="js/jquery-1.5.2.min.js"></script>
+        <script src="http://platform.twitter.com/anywhere.js?id=otS4o4euSZoC3tj1EzjqOQ&v=1.1" type="text/javascript"></script>
+        <script src="js/jquery.nucombo.js"></script>
+        <script src="js/jquery.log.js"></script>
+        <script src="js/jquery.timeago.js"></script>
+        <script src="js/jquery.linkify-1.0.js"></script>
+        <script src="js/ICanHaz.js"></script>
+        <script src="js/date.js"></script>
+        <script src="js/default.js"></script>
+        <script src="js/sweetshow.js"></script>
+    </head>
+    <body>
+        <header></header>
+
+        <div id="container">
+            <div id="frontpage">
+                <img src="gfx/logo.gif" width="302" height="46" alt="Logo">
+                <p>Flip though your tweets as a slideshow</p>
+                <div id="connect" display="none">
+                    <span id="connectButton"></span>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/html" id="listTpl">
+            <li><a href="#">{{name}}</a></li>
+        </script>
+
+        <script type="text/html" id="sweetTpl">
+            <nav id="menu">
+                <ul class="adxm menu">
+                    <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
+                    <li class="toplevel item2"><a href="/">home</a>
+                        <ul id="lists">
+                            <li><a href="#">home</a></li>
+                        </ul>
+                    </li>
+                    <li class="toplevel item3"><a href="/">Log out</a></li>
+                    <li class="toplevel item4"><a href="/slideshow/">Slideshow (Off)</a>
+                        <ul>
+                            <li><a href="#">On + Auto scroll 5 s.</a></li>
+                            <li><a href="#">On + Auto scroll 10 s.</a></li>
+                            <li><a href="#">On 5 s.</a></li>
+                            <li><a href="#">On 10 s</a></li>
+                            <li><a href="#">On 15 s. slide</a></li>
+                            <li><a href="#">Off</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div id="contentarea">
+            </div>
+            <footer id="footer">
+                <button type="button" class="buttonnext">Next</button>
+                <button type="button" class="buttonall">All</button>
+                <button type="button" class="buttonnew">New<br>8</button>
+                <div class="tweet" id="tweet">
+                </div>
+                <button type="button" class="buttonprevious">Previous</button>
+            </footer>
+        </script>
+
+        <script type="text/html" id="tweetTpl">
+            {{#user}}
+            <img src="{{profileImageUrl}}" width="48" height="48" alt="CR">
+            <p class="name">@{{screenName}}</p>
+            {{/user}}
+            <p class="text">{{text}}</p>
+            <p class="datetime"><abbr class="timeago" title="{{craetedAtISO}}">{{createdAt}}</abbr> via {{{source}}}</p>
+        </script>
+
+        <script type="text/html" id="previewTpl">
+            <iframe src="{{href}}">
+            <p>Buggers, your browser does not support iframes :|</p>
+            </iframe>
+        </script>
+
+    </body>
+</html>
