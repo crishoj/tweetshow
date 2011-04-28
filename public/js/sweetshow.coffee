@@ -23,11 +23,11 @@ window.Sweetshow =
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
     $.log "showStatus(#{@curIdx}) out of #{@statuses.length()}"
     $('#tweet').html ich.tweetTpl(@status)
+    $("#tweet .text").linkify(handleLinks: @handleLinks)
+    $("abbr.timeago").timeago()
     twttr.anywhere (T) ->
       T.linkifyUsers()
       T.hovercards()
-    $("abbr.timeago").timeago()
-    $("#tweet .text").linkify(handleLinks: @handleLinks)
     if idx < @statuses.length()
       $('.buttonprevious').bind('click', => @changeStatus(idx+1))
     else

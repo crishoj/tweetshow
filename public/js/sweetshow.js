@@ -27,13 +27,13 @@
       this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
       $.log("showStatus(" + this.curIdx + ") out of " + (this.statuses.length()));
       $('#tweet').html(ich.tweetTpl(this.status));
+      $("#tweet .text").linkify({
+        handleLinks: this.handleLinks
+      });
+      $("abbr.timeago").timeago();
       twttr.anywhere(function(T) {
         T.linkifyUsers();
         return T.hovercards();
-      });
-      $("abbr.timeago").timeago();
-      $("#tweet .text").linkify({
-        handleLinks: this.handleLinks
       });
       if (idx < this.statuses.length()) {
         $('.buttonprevious').bind('click', __bind(function() {
