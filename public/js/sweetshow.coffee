@@ -50,6 +50,7 @@ window.Sweetshow =
 
 $(document).ready -> 
   $.log 'ready'
+  $(window).bind 'beforeunload', -> 'You (or the previewed tweet URL) is trying to leave Sweetshow. Do you wish to leave?'
   twttr.anywhere (T) -> 
     $.log 'anywhere loaded'
     $("#loading").hide()

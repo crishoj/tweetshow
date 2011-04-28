@@ -60,6 +60,9 @@
   };
   $(document).ready(function() {
     $.log('ready');
+    $(window).bind('beforeunload', function() {
+      return 'You (or the previewed tweet URL) is trying to leave Sweetshow. Do you wish to leave?';
+    });
     return twttr.anywhere(function(T) {
       $.log('anywhere loaded');
       $("#loading").hide();
