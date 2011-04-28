@@ -1,15 +1,14 @@
-set :application, "set your application name here"
-set :repository,  "set your repository location here"
+set :application, "sweetshow"
+set :repository,  "git@github.com:crishoj/sweetshow.git"
 
-# If you aren't deploying to /u/apps/#{application} on the target
-# servers (which is the default), you can specify the actual location
-# via the :deploy_to variable:
-# set :deploy_to, "/var/www/#{application}"
+set :scm, :git
+set :branch, "master"
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
+set :user, "deployer"  # The server's user for deploys
+set :deploy_via, :remote_cache
 
-role :app, "your app-server here"
-role :web, "your web-server here"
-role :db,  "your db-server here", :primary => true
+set :default_stage, "development"
+set :stages, %w(production development)
+require 'capistrano/ext/multistage'
+
+default_run_options[:pty] = true
