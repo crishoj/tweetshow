@@ -1,11 +1,12 @@
 window.Sweetshow =
 
-  show: (user) ->
-    @user = user;
-    $('#container').html ich.sweetTpl(user)
-    user.lists().each (list) ->
+  init: (twitter) ->
+    @twitter = twitter
+    @user = @twitter.currentUser
+    $('#container').html ich.sweetTpl(@user)
+    @user.lists().each (list) ->
       $('#lists').append ich.listTpl(list)
-    @showTimeline user.homeTimeline()
+    @showTimeline @user.homeTimeline()
 
   showTimeline: (timeline) ->
     $.log 'showTimeline'
@@ -25,9 +26,8 @@ window.Sweetshow =
     $('#tweet').html ich.tweetTpl(@status)
     $("#tweet .text").linkify(handleLinks: @handleLinks)
     $("abbr.timeago").timeago()
-    twttr.anywhere (T) ->
-      T.linkifyUsers()
-      T.hovercards()
+    @twitter.linkifyUsers()
+    @twitter.hovercards()
     if idx < @statuses.length()
       $('.buttonprevious').bind('click', => @changeStatus(idx+1))
     else
@@ -55,11 +55,10 @@ $(document).ready ->
     $("#loading").hide()
     if T.isConnected()
       $.log 'connected'
-      Sweetshow.show(T.currentUser)
+      Sweetshow.init(T)
     else
       $.log 'not connected'
       $('#connect').show()
       T("#connectButton").connectButton
         size: "xlarge"
-        authComplete: -> Sweetshow.show(T.currentUser)
-
+        authComplete: -> Sweetshow.init(T)

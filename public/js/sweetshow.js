@@ -1,13 +1,14 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.Sweetshow = {
-    show: function(user) {
-      this.user = user;
-      $('#container').html(ich.sweetTpl(user));
-      user.lists().each(function(list) {
+    init: function(twitter) {
+      this.twitter = twitter;
+      this.user = this.twitter.currentUser;
+      $('#container').html(ich.sweetTpl(this.user));
+      this.user.lists().each(function(list) {
         return $('#lists').append(ich.listTpl(list));
       });
-      return this.showTimeline(user.homeTimeline());
+      return this.showTimeline(this.user.homeTimeline());
     },
     showTimeline: function(timeline) {
       $.log('showTimeline');
@@ -31,10 +32,8 @@
         handleLinks: this.handleLinks
       });
       $("abbr.timeago").timeago();
-      twttr.anywhere(function(T) {
-        T.linkifyUsers();
-        return T.hovercards();
-      });
+      this.twitter.linkifyUsers();
+      this.twitter.hovercards();
       if (idx < this.statuses.length()) {
         $('.buttonprevious').bind('click', __bind(function() {
           return this.changeStatus(idx + 1);
@@ -66,14 +65,14 @@
       $("#loading").hide();
       if (T.isConnected()) {
         $.log('connected');
-        return Sweetshow.show(T.currentUser);
+        return Sweetshow.init(T);
       } else {
         $.log('not connected');
         $('#connect').show();
         return T("#connectButton").connectButton({
           size: "xlarge",
           authComplete: function() {
-            return Sweetshow.show(T.currentUser);
+            return Sweetshow.init(T);
           }
         });
       }
