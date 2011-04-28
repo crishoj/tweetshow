@@ -9,3 +9,5 @@ vendor
 test
 app
 .DS_Store
+/.sass-cache/
+/nbproject/private/
