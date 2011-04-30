@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="css/default.css">
         <link rel="stylesheet" href="css/jquery.nucombo.css">
         <script src="js/jquery-1.5.2.min.js"></script>
-        <script src="http://platform.twitter.com/anywhere.js?id=otS4o4euSZoC3tj1EzjqOQ&v=1.1" type="text/javascript"></script>
+        <script src="http://platform.twitter.com/anywhere.js?id=otS4o4euSZoC3tj1EzjqOQ&v=1.2.0" type="text/javascript"></script>
         <script src="js/jquery.nucombo.js"></script>
         <script src="js/jquery.log.js"></script>
         <script src="js/jquery.timeago.js"></script>
@@ -21,6 +21,18 @@
         <script src="js/date.js"></script>
         <script src="js/default.js"></script>
         <script src="js/sweetshow.js"></script>
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-23031830-1']);
+          _gaq.push(['_setDomainName', 'none']);
+          _gaq.push(['_setAllowLinker', true]);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
     </head>
     <body>
         <header></header>
@@ -83,7 +95,7 @@
         </script>
 
         <script type="text/html" id="previewTpl">
-            <iframe src="{{href}}">
+            <iframe class="preview" src="{{href}}">
             <p>Buggers, your browser does not support iframes :|</p>
             </iframe>
         </script>

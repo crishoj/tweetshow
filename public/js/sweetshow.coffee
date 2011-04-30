@@ -1,17 +1,38 @@
 window.Sweetshow =
 
-  init: (twitter) ->
-    @twitter = twitter
+  init: ->
+    @registerHashtagLinkifier()
+    twttr.anywhere (T) => 
+      @twitter = T
+      $.log 'anywhere loaded'
+      if T.isConnected()
+        $.log 'connected'
+        @begin()
+      else
+        $.log 'not connected'
+        $('#connect').show()
+        T("#connectButton").connectButton
+          size: "xlarge"
+          authComplete: -> @begin()
+
+  begin: ->
     @user = @twitter.currentUser
     $('#container').html ich.sweetTpl(@user)
     @user.lists().each (list) ->
       $('#lists').append ich.listTpl(list)
     @showTimeline @user.homeTimeline()
 
+  registerHashtagLinkifier: ->
+    $.extend $.fn.linkify.plugins, 
+      twitterHashtag: 
+        re: new RegExp('(^|[^0-9A-Z&\\/]+)(#|＃)([0-9A-Z_]*[A-Z_]+[a-z0-9_ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþ\\303\\277]*)', 'ig')
+        tmpl: (match, pre, hash, tag) ->
+          pre+'<a href="http://twitter.com/search?q=%23'+tag+'" title="#'+tag+'">'+hash+tag+'</a>'
+
   showTimeline: (timeline) ->
     $.log 'showTimeline'
     @timeline = timeline
-    @timeline.first(40, (statuses) => @handleStatuses(statuses))
+    @timeline.first 100, (statuses) => @handleStatuses(statuses)
 
   handleStatuses: (statuses) ->
     $.log 'handleStatuses'
@@ -24,10 +45,10 @@ window.Sweetshow =
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
     $.log "showStatus(#{@curIdx}) out of #{@statuses.length()}"
     $('#tweet').html ich.tweetTpl(@status)
-    $("#tweet .text").linkify(handleLinks: @handleLinks)
+    $("#tweet .text").linkify(use: [], handleLinks: @handleLinks)
+    $("#tweet .text").linkify(use: 'twitterHashtag', handleLinks: @handleHashtags)
     $("abbr.timeago").timeago()
-    @twitter.linkifyUsers()
-    @twitter.hovercards()
+    @twitter('.tweet').hovercards()
     if idx < @statuses.length()
       $('.buttonprevious').bind('click', => @changeStatus(idx+1))
     else
@@ -38,28 +59,31 @@ window.Sweetshow =
       $('.buttonnext').unbind()
 
   changeStatus: (idx) ->
-    $('#contentarea').html('')
+    $('#preview').remove()
     @showStatus(idx)
 
+  handleHashtags: (links) -> 
+    links
+      .addClass('hashtag')
+      .attr('target', '_blank')
+
   handleLinks: (links) -> 
-    links.addClass 'url'
+    links
+      .addClass('url')
+      .attr('target', '_blank')
+    Sweetshow.catchUnload()
     $('#contentarea')
-      #.css("overflow","auto")
       .height($(window).height() - 220)
       .html(ich.previewTpl(links[0]))
+    $('iframe.preview').one('load', -> @ignoreUnload)
 
-$(document).ready -> 
-  $.log 'ready'
-  $(window).bind 'beforeunload', -> 'You (or the previewed tweet URL) is trying to leave Sweetshow. Do you wish to leave?'
-  twttr.anywhere (T) -> 
-    $.log 'anywhere loaded'
-    $("#loading").hide()
-    if T.isConnected()
-      $.log 'connected'
-      Sweetshow.init(T)
-    else
-      $.log 'not connected'
-      $('#connect').show()
-      T("#connectButton").connectButton
-        size: "xlarge"
-        authComplete: -> Sweetshow.init(T)
+  catchUnload: ->
+    $.log 'catching unload'
+    $(window).bind 'beforeunload', -> 'You (or the previewed tweet URL) is trying to leave Sweetshow. Do you wish to leave?'
+
+  ignoreUnload: ->
+    $.log 'ignoring unload'
+    $(window).unbind 'beforeunload'
+
+
+$(document).ready -> Sweetshow.init()
