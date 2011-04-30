@@ -14,9 +14,9 @@
           $('#connect').show();
           return T("#connectButton").connectButton({
             size: "xlarge",
-            authComplete: function() {
+            authComplete: __bind(function() {
               return this.begin();
-            }
+            }, this)
           });
         }
       }, this));
@@ -24,6 +24,9 @@
     begin: function() {
       this.user = this.twitter.currentUser;
       $('#container').html(ich.sweetTpl(this.user));
+      $('#signout').click(__bind(function() {
+        return this.signout();
+      }, this));
       this.user.lists().each(function(list) {
         return $('#lists').append(ich.listTpl(list));
       });
@@ -93,9 +96,9 @@
       links.addClass('url').attr('target', '_blank');
       Sweetshow.catchUnload();
       $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(links[0]));
-      return $('iframe.preview').one('load', function() {
+      return $('iframe.preview').one('load', __bind(function() {
         return this.ignoreUnload;
-      });
+      }, this));
     },
     catchUnload: function() {
       $.log('catching unload');
@@ -106,6 +109,12 @@
     ignoreUnload: function() {
       $.log('ignoring unload');
       return $(window).unbind('beforeunload');
+    },
+    signout: function() {
+      $.log('signout');
+      this.ignoreUnload();
+      twttr.anywhere.signOut();
+      return window.location.reload();
     }
   };
   $(document).ready(function() {

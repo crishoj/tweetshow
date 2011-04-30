@@ -13,11 +13,12 @@ window.Sweetshow =
         $('#connect').show()
         T("#connectButton").connectButton
           size: "xlarge"
-          authComplete: -> @begin()
+          authComplete: => @begin()
 
   begin: ->
     @user = @twitter.currentUser
     $('#container').html ich.sweetTpl(@user)
+    $('#signout').click => @signout()
     @user.lists().each (list) ->
       $('#lists').append ich.listTpl(list)
     @showTimeline @user.homeTimeline()
@@ -75,7 +76,7 @@ window.Sweetshow =
     $('#contentarea')
       .height($(window).height() - 220)
       .html(ich.previewTpl(links[0]))
-    $('iframe.preview').one('load', -> @ignoreUnload)
+    $('iframe.preview').one('load', => @ignoreUnload)
 
   catchUnload: ->
     $.log 'catching unload'
@@ -85,5 +86,10 @@ window.Sweetshow =
     $.log 'ignoring unload'
     $(window).unbind 'beforeunload'
 
+  signout: ->
+    $.log 'signout'
+    @ignoreUnload()
+    twttr.anywhere.signOut()
+    window.location.reload()
 
 $(document).ready -> Sweetshow.init()
