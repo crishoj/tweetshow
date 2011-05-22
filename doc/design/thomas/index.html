@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">	
+	<title>Sweetshow</title>
+	<meta name="description" content="Flip through your tweets as slideshow">
+	<meta name="keywords" content="twitter slideshow">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" href="css/default.css">
+	<link rel="stylesheet" href="css/jquery.nucombo.css">
+	<script src="js/jquery-1.5.2.min.js"></script>
+	<script src="js/jquery.nucombo.js"></script>
+	<script src="js/default.js"></script>
+</head>
+<body>
+<header></header>
+<div id="container">
+	<div id="frontpage">
+
+		<img src="gfx/logo.gif" width="302" height="46" alt="Logo">
+		<p>Flip though your tweets as slideshow</p>
+
+		<form action="#" method="post" enctype="application/x-www-form-urlencoded" id="logind">
+			<fieldset>
+
+				<label class="labelaccountname" for="accountname">
+					<em>Login to your twitter account</em>
+					<input required class="input" name="accountname" id="accountname" value="test" type="text">
+				</label>
+
+				<label class="labelAccountpassword" for="accountpassword">
+					<em>Password to your twitter account</em>
+					<input required class="input" name="accountpassword" id="accountpassword" value="test" type="password">
+				</label>
+        
+				<input name="Submit" class="submit" value="" type="submit">
+
+			</fieldset> 
+		</form>
+
+
+		<form action="#" method="post" enctype="application/x-www-form-urlencoded" id="chooselist" class="disabled">
+        	<div id="disabled"></div>
+			<fieldset>
+				<label class="labelChooselist" for="chooselist">
+					<em>Choose a list</em>
+					<select id="listitem">
+						<option value="all">All</option>
+					</select>
+				</label>	
+			</fieldset> 
+		</form>
+        
+        <div id="message" class="hidden"></div>
+
+	</div>
+
+</div>
+</body>
+</html>
