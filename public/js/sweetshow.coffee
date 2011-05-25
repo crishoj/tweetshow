@@ -78,6 +78,7 @@ window.Sweetshow =
 
   changeStatus: (idx) ->
     $('#preview').remove()
+    $.log "changeStatus(#{idx}) out of #{@statuses.length()}"
     @showStatus(idx)
 
   handleHashtags: (links) -> 
