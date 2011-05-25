@@ -41,30 +41,39 @@ window.Sweetshow =
     @showStatus 1
 
   showStatus: (idx) -> 
+    $.log "showStatus(#{idx}) out of #{@statuses.length()}"
     @curIdx = idx
     @status = @statuses.get(idx)
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
-    $.log "showStatus(#{@curIdx}) out of #{@statuses.length()}"
     $('#tweet').html ich.tweetTpl(@status)
-    $("#tweet .text").linkify(use: [], handleLinks: @handleLinks)
+    @foundLink = false
+    $("#tweet .text").linkify(use: [], handleLinks: (links) => @handleLinks(links))
+    $.log("Found link? #{@foundLink}")
+    if @foundLink and $('#tweet').hasClass('big')
+      $('#tweet').detach()
+        .removeClass('big').appendTo('#contentarea')
+    else if not @foundLink and not $('#tweet').hasClass('big')
+      $('#tweet').detach()
+        .addClass('big').appendTo('#tweetcontainer')
     $("#tweet .text").linkify(use: 'twitterHashtag', handleLinks: @handleHashtags)
     $("abbr.timeago").timeago()
     @twitter('.tweet').hovercards()
     if idx < @statuses.length()
-      $('.buttonprevious').bind('click', => @changeStatus(idx+1))
+      @enableButton $('.buttonprevious'), => @changeStatus(@curIdx+1)
     else
-      $('.buttonprevious').unbind()
+      @disableButton $('.buttonprevious')
     if idx > 1
-      @enabledButton $('.buttonnext'), => @changeStatus(idx-1)
+      @enableButton $('.buttonnext'), => @changeStatus(@curIdx-1)
     else
       @disableButton $('.buttonnext')
 
   disableButton: (elem) ->
-    elem.attr("disabled", true).removeClass('enabled').addClass('disabled').unbind()
+    if elem.hasClass('enabled')
+      elem.attr("disabled", true).removeClass('enabled').addClass('disabled').unbind()
 
-  enabledButton: (elem, callback) ->
-    elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback)
-    
+  enableButton: (elem, callback) ->
+    if elem.hasClass('disabled')
+      elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback)
 
   changeStatus: (idx) ->
     $('#preview').remove()
@@ -76,10 +85,9 @@ window.Sweetshow =
       .attr('target', '_blank')
 
   handleLinks: (links) -> 
-    links
-      .addClass('url')
-      .attr('target', '_blank')
-    Sweetshow.catchUnload()
+    $.log("handleLinks() with #{links.length} links")
+    @foundLink = true
+    links.addClass('url').attr('target', '_blank')
     $('#contentarea')
       .height($(window).height() - 220)
       .html(ich.previewTpl(links[0]))

@@ -2,6 +2,7 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.Sweetshow = {
     init: function() {
+      this.catchUnload();
       this.registerHashtagLinkifier();
       return twttr.anywhere(__bind(function(T) {
         this.twitter = T;
@@ -55,15 +56,24 @@
       return this.showStatus(1);
     },
     showStatus: function(idx) {
+      $.log("showStatus(" + idx + ") out of " + (this.statuses.length()));
       this.curIdx = idx;
       this.status = this.statuses.get(idx);
       this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
-      $.log("showStatus(" + this.curIdx + ") out of " + (this.statuses.length()));
       $('#tweet').html(ich.tweetTpl(this.status));
+      this.foundLink = false;
       $("#tweet .text").linkify({
         use: [],
-        handleLinks: this.handleLinks
+        handleLinks: __bind(function(links) {
+          return this.handleLinks(links);
+        }, this)
       });
+      $.log("Found link? " + this.foundLink);
+      if (this.foundLink && $('#tweet').hasClass('big')) {
+        $('#tweet').detach().removeClass('big').appendTo('#contentarea');
+      } else if (!this.foundLink && !$('#tweet').hasClass('big')) {
+        $('#tweet').detach().addClass('big').appendTo('#tweetcontainer');
+      }
       $("#tweet .text").linkify({
         use: 'twitterHashtag',
         handleLinks: this.handleHashtags
@@ -71,27 +81,32 @@
       $("abbr.timeago").timeago();
       this.twitter('.tweet').hovercards();
       if (idx < this.statuses.length()) {
-        $('.buttonprevious').bind('click', __bind(function() {
-          return this.changeStatus(idx + 1);
+        this.enableButton($('.buttonprevious'), __bind(function() {
+          return this.changeStatus(this.curIdx + 1);
         }, this));
       } else {
-        $('.buttonprevious').unbind();
+        this.disableButton($('.buttonprevious'));
       }
       if (idx > 1) {
-        return this.enabledButton($('.buttonnext'), __bind(function() {
-          return this.changeStatus(idx - 1);
+        return this.enableButton($('.buttonnext'), __bind(function() {
+          return this.changeStatus(this.curIdx - 1);
         }, this));
       } else {
         return this.disableButton($('.buttonnext'));
       }
     },
     disableButton: function(elem) {
-      return elem.attr("disabled", true).removeClass('enabled').addClass('disabled').unbind();
+      if (elem.hasClass('enabled')) {
+        return elem.attr("disabled", true).removeClass('enabled').addClass('disabled').unbind();
+      }
     },
-    enabledButton: function(elem, callback) {
-      return elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback);
+    enableButton: function(elem, callback) {
+      if (elem.hasClass('disabled')) {
+        return elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback);
+      }
     },
     changeStatus: function(idx) {
+      $.log("changeStatus(" + idx + ") out of " + (this.statuses.length()));
       $('.preview').animate({
         leftMargin: '+9999px',
         complete: function() {
@@ -104,6 +119,8 @@
       return links.addClass('hashtag').attr('target', '_blank');
     },
     handleLinks: function(links) {
+      $.log("handleLinks() with " + links.length + " links");
+      this.foundLink = true;
       links.addClass('url').attr('target', '_blank');
       return $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(links[0]));
     },
