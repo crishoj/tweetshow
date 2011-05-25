@@ -2,6 +2,7 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.Sweetshow = {
     init: function() {
+      $.log('init');
       this.catchUnload();
       this.registerHashtagLinkifier();
       return twttr.anywhere(__bind(function(T) {
@@ -106,13 +107,8 @@
       }
     },
     changeStatus: function(idx) {
+      $('#preview').remove();
       $.log("changeStatus(" + idx + ") out of " + (this.statuses.length()));
-      $('.preview').animate({
-        leftMargin: '+9999px',
-        complete: function() {
-          return this.remove();
-        }
-      });
       return this.showStatus(idx);
     },
     handleHashtags: function(links) {
