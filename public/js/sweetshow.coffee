@@ -29,8 +29,9 @@ window.Sweetshow =
     $.extend $.fn.linkify.plugins, 
       twitterHashtag: 
         re: new RegExp('(^|[^0-9A-Z&\\/]+)(#|＃)([0-9A-Z_]*[A-Z_]+[a-z0-9_ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþ\\303\\277]*)', 'ig')
-        tmpl: (match, pre, hash, tag) ->
-          pre+'<a href="http://twitter.com/search?q=%23'+tag+'" title="#'+tag+'">'+hash+tag+'</a>'
+        tmpl: (match, pre, hash, tag) -> pre + """
+          <a href="http://twitter.com/search?q=%23#{tag}" title="\##{tag}">#{hash+tag}</a>
+        """
 
   showTimeline: (timeline) ->
     $.log 'showTimeline'
