@@ -37,7 +37,7 @@
         twitterHashtag: {
           re: new RegExp('(^|[^0-9A-Z&\\/]+)(#|＃)([0-9A-Z_]*[A-Z_]+[a-z0-9_ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþ\\303\\277]*)', 'ig'),
           tmpl: function(match, pre, hash, tag) {
-            return pre + '<a href="http://twitter.com/search?q=%23' + tag + '" title="#' + tag + '">' + hash + tag + '</a>';
+            return pre + ("<a href=\"http://twitter.com/search?q=%23" + tag + "\" title=\"\#" + tag + "\">" + (hash + tag) + "</a>");
           }
         }
       });
@@ -78,15 +78,26 @@
         $('.buttonprevious').unbind();
       }
       if (idx > 1) {
-        return $('.buttonnext').bind('click', __bind(function() {
+        return this.enabledButton($('.buttonnext'), __bind(function() {
           return this.changeStatus(idx - 1);
         }, this));
       } else {
-        return $('.buttonnext').unbind();
+        return this.disableButton($('.buttonnext'));
       }
     },
+    disableButton: function(elem) {
+      return elem.attr("disabled", true).removeClass('enabled').addClass('disabled').unbind();
+    },
+    enabledButton: function(elem, callback) {
+      return elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback);
+    },
     changeStatus: function(idx) {
-      $('#preview').remove();
+      $('.preview').animate({
+        leftMargin: '+9999px',
+        complete: function() {
+          return this.remove();
+        }
+      });
       return this.showStatus(idx);
     },
     handleHashtags: function(links) {
@@ -94,11 +105,7 @@
     },
     handleLinks: function(links) {
       links.addClass('url').attr('target', '_blank');
-      Sweetshow.catchUnload();
-      $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(links[0]));
-      return $('iframe.preview').one('load', __bind(function() {
-        return this.ignoreUnload;
-      }, this));
+      return $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(links[0]));
     },
     catchUnload: function() {
       $.log('catching unload');

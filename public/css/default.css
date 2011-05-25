@@ -163,14 +163,18 @@ width:100%;
 clear:both;
 }
 	footer button { border:0; height:49px; width:49px; display:block; margin:71px 7px 0 0; padding:0; float:left; 
-background:url("../gfx/button-square.gif") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
-	footer button:hover { background:url("../gfx/button-square-hover.gif"); color:#fff; text-shadow:none; }
-
+                        background:url("../gfx/button-square.gif") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
+	footer button.enabled:hover { background:url("../gfx/button-square-hover.gif"); color:#fff; text-shadow:none; }
+        footer button.disabled { color: #bcbcbc; }
 	footer button.buttonnext { width:145px; margin-left:21px; background:url("../gfx/button-left.gif") no-repeat; text-align:right; padding-right:16px; }
-	footer button.buttonnext:hover { background:url("../gfx/button-left-hover.gif"); }
-	
+	footer button.buttonnext.disabled { background:url("../gfx/button-left-disabled.gif") no-repeat; }
+	footer button.buttonnext.enabled:hover { background:url("../gfx/button-left-hover.gif") no-repeat; }
+
+        footer button.buttonnew.disabled,
+        footer button.buttonall.disabled { background:url("../gfx/button-square-disabled.gif") no-repeat; }
+
 	footer button.buttonprevious { float:right; width:150px; height:50px; background:url("../gfx/button-right.gif") no-repeat; text-align:left; padding-left:16px; margin-right:25px; }
-	footer button.buttonprevious:hover { background:url("../gfx/button-right-hover.gif"); color:#fff; text-shadow:none; }
+	footer button.buttonprevious.enabled:hover { background:url("../gfx/button-right-hover.gif"); color:#fff; text-shadow:none; }
 
 	a:link 		{ text-decoration:none; }
 	a:visited 	{ text-decoration:none; }

@@ -55,9 +55,16 @@ window.Sweetshow =
     else
       $('.buttonprevious').unbind()
     if idx > 1
-      $('.buttonnext').bind('click', => @changeStatus(idx-1))
+      @enabledButton $('.buttonnext'), => @changeStatus(idx-1)
     else
-      $('.buttonnext').unbind()
+      @disableButton $('.buttonnext')
+
+  disableButton: (elem) ->
+    elem.attr("disabled", true).removeClass('enabled').addClass('disabled').unbind()
+
+  enabledButton: (elem, callback) ->
+    elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback)
+    
 
   changeStatus: (idx) ->
     $('#preview').remove()
