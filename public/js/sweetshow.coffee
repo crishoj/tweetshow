@@ -24,6 +24,12 @@ window.Sweetshow =
     @user.lists().each (list) ->
       $('#lists').append ich.listTpl(list)
     @showTimeline @user.homeTimeline()
+    for key in ['return', 'o']
+      $(document).bind 'keyup', key, => @open() 
+    for key in ['right', 'j', 'space']
+      $(document).bind 'keyup', key, => @previous() 
+    for key in ['left', 'k', 'backspace']
+      $(document).bind 'keyup', key, => @next() 
 
   registerHashtagLinkifier: ->
     $.extend $.fn.linkify.plugins, 
@@ -49,26 +55,47 @@ window.Sweetshow =
     @status = @statuses.get(idx)
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
     $('#tweet').html ich.tweetTpl(@status)
-    @foundLink = false
     $("#tweet .text").linkify(use: [], handleLinks: (links) => @handleLinks(links))
-    $.log("Found link? #{@foundLink}")
-    if @foundLink and $('#tweet').hasClass('big')
-      $('#tweet').detach()
-        .removeClass('big').appendTo('#contentarea')
-    else if not @foundLink and not $('#tweet').hasClass('big')
-      $('#tweet').detach()
-        .addClass('big').appendTo('#tweetcontainer')
+    if @hasLink()
+      if $('#tweet').hasClass('big')
+        $('#tweet').detach().removeClass('big').appendTo('#contentarea')
+    else # no link
+      if not $('#tweet').hasClass('big')
+        $('#tweet').detach().addClass('big').appendTo('#tweetcontainer')
     $("#tweet .text").linkify(use: 'twitterHashtag', handleLinks: @handleHashtags)
     $("abbr.timeago").timeago()
     @twitter('.tweet').hovercards()
-    if idx < @statuses.length()
-      @enableButton $('.buttonprevious'), => @changeStatus(@curIdx+1)
+    @toggleButton @hasPrevious(), $('.buttonprevious'), => @previous()
+    @toggleButton @hasNext(), $('.buttonnext'), => @next()
+
+  hasNext: -> 
+    @curIdx > 1
+
+  hasPrevious: ->
+    @curIdx < @statuses.length()
+
+  next: ->
+    if @hasNext()
+      @changeStatus(@curIdx-1)
+
+  previous: ->
+    if @hasPrevious()
+      @changeStatus(@curIdx+1)
+
+  hasLink: ->
+    @links.length > 0
+
+  open: ->
+    $.log('open')
+    if @hasLink()
+      @ignoreUnload()
+      window.location = @links[0].href 
+
+  toggleButton: (enabled, elem, callback) ->
+    if enabled
+      @enableButton(elem, callback)
     else
-      @disableButton $('.buttonprevious')
-    if idx > 1
-      @enableButton $('.buttonnext'), => @changeStatus(@curIdx-1)
-    else
-      @disableButton $('.buttonnext')
+      @disableButton(elem)
 
   disableButton: (elem) ->
     if elem.hasClass('enabled')
@@ -80,7 +107,6 @@ window.Sweetshow =
 
   changeStatus: (idx) ->
     $('#preview').remove()
-    $.log "changeStatus(#{idx}) out of #{@statuses.length()}"
     @showStatus(idx)
 
   handleHashtags: (links) -> 
@@ -89,12 +115,12 @@ window.Sweetshow =
       .attr('target', '_blank')
 
   handleLinks: (links) -> 
-    $.log("handleLinks() with #{links.length} links")
-    @foundLink = true
-    links.addClass('url').attr('target', '_blank')
+    @links = links
+    $.log("handleLinks() with #{@links.length} links")
+    @links.addClass('url').attr('target', '_blank')
     $('#contentarea')
       .height($(window).height() - 220)
-      .html(ich.previewTpl(links[0]))
+      .html(ich.previewTpl(@links[0]))
 
   catchUnload: ->
     $.log 'catching unload'

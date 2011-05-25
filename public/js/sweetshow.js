@@ -24,6 +24,7 @@
       }, this));
     },
     begin: function() {
+      var key, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
       this.user = this.twitter.currentUser;
       $('#container').html(ich.sweetTpl(this.user));
       $('#signout').click(__bind(function() {
@@ -32,7 +33,30 @@
       this.user.lists().each(function(list) {
         return $('#lists').append(ich.listTpl(list));
       });
-      return this.showTimeline(this.user.homeTimeline());
+      this.showTimeline(this.user.homeTimeline());
+      _ref = ['return', 'o'];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        key = _ref[_i];
+        $(document).bind('keyup', key, __bind(function() {
+          return this.open();
+        }, this));
+      }
+      _ref2 = ['right', 'j', 'space'];
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        key = _ref2[_j];
+        $(document).bind('keyup', key, __bind(function() {
+          return this.previous();
+        }, this));
+      }
+      _ref3 = ['left', 'k', 'backspace'];
+      _results = [];
+      for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
+        key = _ref3[_k];
+        _results.push($(document).bind('keyup', key, __bind(function() {
+          return this.next();
+        }, this)));
+      }
+      return _results;
     },
     registerHashtagLinkifier: function() {
       return $.extend($.fn.linkify.plugins, {
@@ -62,18 +86,20 @@
       this.status = this.statuses.get(idx);
       this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
       $('#tweet').html(ich.tweetTpl(this.status));
-      this.foundLink = false;
       $("#tweet .text").linkify({
         use: [],
         handleLinks: __bind(function(links) {
           return this.handleLinks(links);
         }, this)
       });
-      $.log("Found link? " + this.foundLink);
-      if (this.foundLink && $('#tweet').hasClass('big')) {
-        $('#tweet').detach().removeClass('big').appendTo('#contentarea');
-      } else if (!this.foundLink && !$('#tweet').hasClass('big')) {
-        $('#tweet').detach().addClass('big').appendTo('#tweetcontainer');
+      if (this.hasLink()) {
+        if ($('#tweet').hasClass('big')) {
+          $('#tweet').detach().removeClass('big').appendTo('#contentarea');
+        }
+      } else {
+        if (!$('#tweet').hasClass('big')) {
+          $('#tweet').detach().addClass('big').appendTo('#tweetcontainer');
+        }
       }
       $("#tweet .text").linkify({
         use: 'twitterHashtag',
@@ -81,19 +107,44 @@
       });
       $("abbr.timeago").timeago();
       this.twitter('.tweet').hovercards();
-      if (idx < this.statuses.length()) {
-        this.enableButton($('.buttonprevious'), __bind(function() {
-          return this.changeStatus(this.curIdx + 1);
-        }, this));
-      } else {
-        this.disableButton($('.buttonprevious'));
+      this.toggleButton(this.hasPrevious(), $('.buttonprevious'), __bind(function() {
+        return this.previous();
+      }, this));
+      return this.toggleButton(this.hasNext(), $('.buttonnext'), __bind(function() {
+        return this.next();
+      }, this));
+    },
+    hasNext: function() {
+      return this.curIdx > 1;
+    },
+    hasPrevious: function() {
+      return this.curIdx < this.statuses.length();
+    },
+    next: function() {
+      if (this.hasNext()) {
+        return this.changeStatus(this.curIdx - 1);
       }
-      if (idx > 1) {
-        return this.enableButton($('.buttonnext'), __bind(function() {
-          return this.changeStatus(this.curIdx - 1);
-        }, this));
+    },
+    previous: function() {
+      if (this.hasPrevious()) {
+        return this.changeStatus(this.curIdx + 1);
+      }
+    },
+    hasLink: function() {
+      return this.links.length > 0;
+    },
+    open: function() {
+      $.log('open');
+      if (this.hasLink()) {
+        this.ignoreUnload();
+        return window.location = this.links[0].href;
+      }
+    },
+    toggleButton: function(enabled, elem, callback) {
+      if (enabled) {
+        return this.enableButton(elem, callback);
       } else {
-        return this.disableButton($('.buttonnext'));
+        return this.disableButton(elem);
       }
     },
     disableButton: function(elem) {
@@ -108,17 +159,16 @@
     },
     changeStatus: function(idx) {
       $('#preview').remove();
-      $.log("changeStatus(" + idx + ") out of " + (this.statuses.length()));
       return this.showStatus(idx);
     },
     handleHashtags: function(links) {
       return links.addClass('hashtag').attr('target', '_blank');
     },
     handleLinks: function(links) {
-      $.log("handleLinks() with " + links.length + " links");
-      this.foundLink = true;
-      links.addClass('url').attr('target', '_blank');
-      return $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(links[0]));
+      this.links = links;
+      $.log("handleLinks() with " + this.links.length + " links");
+      this.links.addClass('url').attr('target', '_blank');
+      return $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(this.links[0]));
     },
     catchUnload: function() {
       $.log('catching unload');
