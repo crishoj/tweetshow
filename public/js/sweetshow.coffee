@@ -1,6 +1,7 @@
 window.Sweetshow =
 
   init: ->
+    $.log 'init'
     @catchUnload()
     @registerHashtagLinkifier()
     twttr.anywhere (T) => 
