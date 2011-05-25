@@ -1,6 +1,7 @@
 window.Sweetshow =
 
   init: ->
+    @catchUnload()
     @registerHashtagLinkifier()
     twttr.anywhere (T) => 
       @twitter = T
@@ -91,7 +92,6 @@ window.Sweetshow =
     $('#contentarea')
       .height($(window).height() - 220)
       .html(ich.previewTpl(links[0]))
-    $('iframe.preview').one('load', => @ignoreUnload)
 
   catchUnload: ->
     $.log 'catching unload'
