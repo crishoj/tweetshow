@@ -26,7 +26,7 @@
     begin: function() {
       var key, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
       this.user = this.twitter.currentUser;
-      $('#container').html(ich.sweetTpl(this.user));
+      $('#container').html(ich.mainTpl(this.user));
       $('#signout').click(__bind(function() {
         return this.signout();
       }, this));
@@ -71,7 +71,7 @@
     showTimeline: function(timeline) {
       $.log('showTimeline');
       this.timeline = timeline;
-      return this.timeline.first(100, __bind(function(statuses) {
+      return this.timeline.first(10, __bind(function(statuses) {
         return this.handleStatuses(statuses);
       }, this));
     },

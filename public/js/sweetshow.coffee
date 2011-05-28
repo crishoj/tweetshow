@@ -19,7 +19,7 @@ window.Sweetshow =
 
   begin: ->
     @user = @twitter.currentUser
-    $('#container').html ich.sweetTpl(@user)
+    $('#container').html ich.mainTpl(@user)
     $('#signout').click => @signout()
     @user.lists().each (list) ->
       $('#lists').append ich.listTpl(list)
@@ -42,7 +42,7 @@ window.Sweetshow =
   showTimeline: (timeline) ->
     $.log 'showTimeline'
     @timeline = timeline
-    @timeline.first 100, (statuses) => @handleStatuses(statuses)
+    @timeline.first 10, (statuses) => @handleStatuses(statuses)
 
   handleStatuses: (statuses) ->
     $.log 'handleStatuses'
