@@ -50,20 +50,29 @@ window.Sweetshow =
     @showStatus 1
 
   showStatus: (idx) -> 
-    $.log "showStatus(#{idx}) out of #{@statuses.length()}"
+    $.log "showStatus(#{idx}) out of #{@statuses.length()}: #{@statuses.get(idx).text}"
     @curIdx = idx
-    @status = @statuses.get(idx)
+    @status = @statuses.get(@curIdx)
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
-    $('#tweet').html ich.tweetTpl(@status)
-    $("#tweet .text").linkify(use: [], handleLinks: (links) => @handleLinks(links))
-    if @hasLink()
-      if $('#tweet').hasClass('big')
-        $('#tweet').detach().removeClass('big').appendTo('#contentarea')
-    else # no link
-      if not $('#tweet').hasClass('big')
-        $('#tweet').detach().addClass('big').appendTo('#tweetcontainer')
-    $("#tweet .text").linkify(use: 'twitterHashtag', handleLinks: @handleHashtags)
-    $("abbr.timeago").timeago()
+    e = ich.tweetTpl(@status)
+    e.find('.text')
+      .linkify
+        use: []
+        handleLinks: (links) => @links = links.addClass('url').attr('target', '_blank')
+      .linkify
+        use: 'twitterHashtag'
+        handleLinks: (tags) -> tags.addClass('hashtag').attr('target', '_blank')
+    e.find("abbr.timeago").timeago()
+    if @hasLink() 
+      # Display tweet in footer, preview as content
+      $('#footerarea').html e
+      $('#contentarea').html ich.previewTpl(@links[0])
+    else 
+      # Display tweet as content
+      $('#contentarea').html e.addClass('big')
+      $('#tweet').css('margin-top', -$('#tweet').height()/2)
+
+    $('#contentarea').height($(window).height()-220)
     @twitter('.tweet').hovercards()
     @toggleButton @hasPrevious(), $('.buttonprevious'), => @previous()
     @toggleButton @hasNext(), $('.buttonnext'), => @next()
@@ -86,7 +95,6 @@ window.Sweetshow =
     @links.length > 0
 
   open: ->
-    $.log('open')
     if @hasLink()
       @ignoreUnload()
       window.location = @links[0].href 
@@ -107,20 +115,8 @@ window.Sweetshow =
 
   changeStatus: (idx) ->
     $('#preview').remove()
+    $('#tweet').remove()
     @showStatus(idx)
-
-  handleHashtags: (links) -> 
-    links
-      .addClass('hashtag')
-      .attr('target', '_blank')
-
-  handleLinks: (links) -> 
-    @links = links
-    $.log("handleLinks() with #{@links.length} links")
-    @links.addClass('url').attr('target', '_blank')
-    $('#contentarea')
-      .height($(window).height() - 220)
-      .html(ich.previewTpl(@links[0]))
 
   catchUnload: ->
     $.log 'catching unload'

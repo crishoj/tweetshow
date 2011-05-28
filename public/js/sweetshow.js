@@ -81,31 +81,32 @@
       return this.showStatus(1);
     },
     showStatus: function(idx) {
-      $.log("showStatus(" + idx + ") out of " + (this.statuses.length()));
+      var e;
+      $.log("showStatus(" + idx + ") out of " + (this.statuses.length()) + ": " + (this.statuses.get(idx).text));
       this.curIdx = idx;
-      this.status = this.statuses.get(idx);
+      this.status = this.statuses.get(this.curIdx);
       this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
-      $('#tweet').html(ich.tweetTpl(this.status));
-      $("#tweet .text").linkify({
+      e = ich.tweetTpl(this.status);
+      e.find('.text').linkify({
         use: [],
         handleLinks: __bind(function(links) {
-          return this.handleLinks(links);
+          return this.links = links.addClass('url').attr('target', '_blank');
         }, this)
-      });
-      if (this.hasLink()) {
-        if ($('#tweet').hasClass('big')) {
-          $('#tweet').detach().removeClass('big').appendTo('#contentarea');
-        }
-      } else {
-        if (!$('#tweet').hasClass('big')) {
-          $('#tweet').detach().addClass('big').appendTo('#tweetcontainer');
-        }
-      }
-      $("#tweet .text").linkify({
+      }).linkify({
         use: 'twitterHashtag',
-        handleLinks: this.handleHashtags
+        handleLinks: function(tags) {
+          return tags.addClass('hashtag').attr('target', '_blank');
+        }
       });
-      $("abbr.timeago").timeago();
+      e.find("abbr.timeago").timeago();
+      if (this.hasLink()) {
+        $('#footerarea').html(e);
+        $('#contentarea').html(ich.previewTpl(this.links[0]));
+      } else {
+        $('#contentarea').html(e.addClass('big'));
+        $('#tweet').css('margin-top', -$('#tweet').height() / 2);
+      }
+      $('#contentarea').height($(window).height() - 220);
       this.twitter('.tweet').hovercards();
       this.toggleButton(this.hasPrevious(), $('.buttonprevious'), __bind(function() {
         return this.previous();
@@ -134,7 +135,6 @@
       return this.links.length > 0;
     },
     open: function() {
-      $.log('open');
       if (this.hasLink()) {
         this.ignoreUnload();
         return window.location = this.links[0].href;
@@ -159,16 +159,8 @@
     },
     changeStatus: function(idx) {
       $('#preview').remove();
+      $('#tweet').remove();
       return this.showStatus(idx);
-    },
-    handleHashtags: function(links) {
-      return links.addClass('hashtag').attr('target', '_blank');
-    },
-    handleLinks: function(links) {
-      this.links = links;
-      $.log("handleLinks() with " + this.links.length + " links");
-      this.links.addClass('url').attr('target', '_blank');
-      return $('#contentarea').height($(window).height() - 220).html(ich.previewTpl(this.links[0]));
     },
     catchUnload: function() {
       $.log('catching unload');
