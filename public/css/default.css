@@ -185,23 +185,37 @@ clear:both;
 	footer .right 	{width:600px;float:right;text-align:right; padding:6px 24px 0 0;}
 	footer p 		{color:#999; }
 
-	.tweet	{ position:absolute; left:50%; margin-left:-225px; width:492px; padding:23px 0px 0px 88px; }
-	#contentarea .tweet { position:relative; }
-	footer .tweet { padding-top:48px; margin-left:-233px;}
-	.tweet img { position:absolute; left:0px; top:71px; }
-	.tweet p { margin:0; padding:0; text-shadow:0px 1px 0px #fff; }
-	.tweet .name .twitter-anywhere-user { color:#000; font-size:12px; margin-bottom:6px; }
-	.tweet .text { color:#666; font-size:18px; line-height:22px; }
-	.tweet .urls { margin-bottom:7px; font-size:18px; }
-	.tweet .datetime { font-size:10px; margin-bottom:10px; }
-	.tweet .url	{ color:#b0b0b0; }
-	.tweet .hashtag	{ color:#00af97; }
-	.tweet .text .twitter-anywhere-user { color:#00af97; }
-	
-	.tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; width:692px; }
-	.tweet.big p.text { font-size:36px; line-height:38px; }
-	.tweet.big p.urls { margin-bottom:7px; font-size:36px; }
+	#tweet	{ position:absolute; left:50%; margin-left:-225px; width:492px; padding:23px 0px 0px 88px; }
+	#contentarea #tweet { position:relative; }
+	footer #tweet { padding-top:48px; margin-left:-233px;}
+	#tweet img.profile { position:absolute; left:0px; top:71px; }
+	#tweet p { margin:0; padding:0; text-shadow:0px 1px 0px #fff; }
+	#tweet .name .twitter-anywhere-user { color:#000; font-size:12px; margin-bottom:6px; }
+	#tweet .text { color:#666; font-size:18px; line-height:22px; }
+	#tweet .urls { margin-bottom:7px; font-size:18px; }
+	#tweet .meta { font-size:10px; margin-bottom:10px; line-height: 15px; }
+	#tweet .url	{ color:#b0b0b0; }
+	#tweet .hashtag	{ color:#00af97; }
+	#tweet .text .twitter-anywhere-user { color:#00af97; }
+        
+	#tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; width:692px; }
+	#tweet.big p.text { font-size:36px; line-height:38px; }
+	#tweet.big p.urls { margin-bottom:7px; font-size:36px; }
 
+        #tweet i.bird { background-image: url("../gfx/bird_16_gray.png"); }
+        #tweet .actions { display: none; }
+        #tweet i.bird,
+        #tweet .actions a span i { text-indent: -99999px; outline: none; background-color: transparent; background-repeat: no-repeat; width: 15px; height: 15px; margin: 0 2px -3px 0; display: inline-block; }
+        #tweet .actions a span i { margin-left: 8px }
+        #tweet .actions a:hover span i { background-position: -16px 0px }
+        #tweet.favorited .actions a.favorite span i,
+        #tweet.favorited .actions a.favorite:hover span i,
+        #tweet.retweeted .actions a.retweet span i,
+        #tweet.retweeted .actions a.retweet:hover span i { background-position: -32px 0px }
+        #tweet .actions .favorite span i { background-image: url("../gfx/favorite-sprite.png"); }
+        #tweet .actions .retweet span i { background-image: url("../gfx/retweet-sprite.png"); }
+        #tweet .actions .reply span i { background-image: url("../gfx/reply-sprite.png"); }
+/*        #tweet-actions { visibility: hidden; }*/
 
 /* *********
 	MENU

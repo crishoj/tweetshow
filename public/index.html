@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="css/default.css">
         <link rel="stylesheet" href="css/jquery.nucombo.css">
         <script src="js/jquery-1.6.1.js"></script>
+        <script src="http://platform.twitter.com/widgets.js"></script>
         <script src="http://platform.twitter.com/anywhere.js?id=otS4o4euSZoC3tj1EzjqOQ&v=1.2.0" type="text/javascript"></script>
         <script src="js/jquery.nucombo.js"></script>
         <script src="js/jquery.log.js"></script>
@@ -23,16 +24,16 @@
         <script src="js/default.js"></script>
         <script src="js/sweetshow.js"></script>
         <script type="text/javascript">
-//          var _gaq = _gaq || [];
-//          _gaq.push(['_setAccount', 'UA-23031830-1']);
-//          _gaq.push(['_setDomainName', 'none']);
-//          _gaq.push(['_setAllowLinker', true]);
-//          _gaq.push(['_trackPageview']);
-//          (function() {
-//            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-//            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-//            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-//          })();
+            //          var _gaq = _gaq || [];
+            //          _gaq.push(['_setAccount', 'UA-23031830-1']);
+            //          _gaq.push(['_setDomainName', 'none']);
+            //          _gaq.push(['_setAllowLinker', true]);
+            //          _gaq.push(['_trackPageview']);
+            //          (function() {
+            //            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            //            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            //            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            //          })();
         </script>
     </head>
     <body>
@@ -49,59 +50,67 @@
         </div>
 
         <script type="text/html" id="listTpl">
-            <li><a href="#">{{name}}</a></li>
-        </script>
+        <li><a href="#">{{name}}</a></li>
+    </script>
 
-        <script type="text/html" id="mainTpl">
-            <nav id="menu">
-                <ul class="adxm menu">
-                    <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
-                    <li class="toplevel item2"><a href="/">home</a>
-                        <ul id="lists">
-                            <li><a href="#">home</a></li>
-                        </ul>
-                    </li>
-                    <li class="toplevel item3"><a href="/" id="signout">Log out</a></li>
-                    <li class="toplevel item4"><a href="/slideshow/">Slideshow (Off)</a>
-                        <ul>
-                            <li><a href="#">On + Auto scroll 5 s.</a></li>
-                            <li><a href="#">On + Auto scroll 10 s.</a></li>
-                            <li><a href="#">On 5 s.</a></li>
-                            <li><a href="#">On 10 s</a></li>
-                            <li><a href="#">On 15 s. slide</a></li>
-                            <li><a href="#">Off</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-            <div id="contentarea">
+    <script type="text/html" id="mainTpl">
+        <nav id="menu">
+            <ul class="adxm menu">
+                <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
+                <li class="toplevel item2"><a href="/">home</a>
+                    <ul id="lists">
+                        <li><a href="#">home</a></li>
+                    </ul>
+                </li>
+                <li class="toplevel item3"><a href="/" id="signout">Log out</a></li>
+                <li class="toplevel item4"><a href="/slideshow/">Slideshow (Off)</a>
+                    <ul>
+                        <li><a href="#">On + Auto scroll 5 s.</a></li>
+                        <li><a href="#">On + Auto scroll 10 s.</a></li>
+                        <li><a href="#">On 5 s.</a></li>
+                        <li><a href="#">On 10 s</a></li>
+                        <li><a href="#">On 15 s. slide</a></li>
+                        <li><a href="#">Off</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="contentarea">
+        </div>
+        <footer id="footer">
+            <button type="button" disabled="true" class="buttonnext disabled">Next</button>
+            <button type="button" disabled="true" class="buttonall disabled">All</button>
+            <button type="button" disabled="true" class="buttonnew disabled">New<br>0</button>
+            <div id="footerarea">
             </div>
-            <footer id="footer">
-                <button type="button" disabled="true" class="buttonnext disabled">Next</button>
-                <button type="button" disabled="true" class="buttonall disabled">All</button>
-                <button type="button" disabled="true" class="buttonnew disabled">New<br>0</button>
-                <div id="footerarea">
-                </div>
-                <button type="button" disabled="true" class="buttonprevious disabled">Previous</button>
-            </footer>
-        </script>
+            <button type="button" disabled="true" class="buttonprevious disabled">Previous</button>
+        </footer>
+    </script>
 
-        <script type="text/html" id="tweetTpl">
-            <div class="tweet" id="tweet">
-                {{#user}}
-                <img src="{{profileImageUrl}}" width="48" height="48" alt="CR">
-                <p class="name">@{{screenName}}</p>
-                {{/user}}
-                <p class="text">{{text}}</p>
-                <p class="datetime"><abbr class="timeago" title="{{createdAtISO}}">{{createdAt}}</abbr> via {{{source}}}</p>
-            </div>
-        </script>
+    <script type="text/html" id="tweetTpl">
+        <div class="tweet" id="tweet">
+            {{#user}}
+            <img class="profile" src="{{profileImageUrl}}" width="48" height="48" alt="@{{screenName}}">
+            <p class="name">@{{screenName}}</p>
+            {{/user}}
+            <p class="text">{{text}}</p>
+            <p class="meta">
+                <i class="bird"></i>
+                <abbr class="timeago" title="{{createdAtISO}}">{{createdAt}}</abbr> via {{{source}}}
+                <span class="actions">
+                    <a href="#" class="favorite" title="Favorite"><span><i></i><b>Favorite</b></span></a>
+                    <a href="#" class="retweet" title="Retweet"><span><i></i><b>Retweet</b></span></a>
+                    <a href="http://twitter.com/intent/tweet?in_reply_to={{id}}" class="reply" title="Reply"><span><i></i><b>Reply</b></span></a>
+                </span>                    
+            </p>
+        </div>
+    </script>
 
-        <script type="text/html" id="previewTpl">
-            <iframe class="preview" src="{{href}}">
-            <p>Buggers, your browser does not support iframes :|</p>
-            </iframe>
-        </script>
+    <script type="text/html" id="previewTpl">
+        <iframe class="preview" src="{{href}}">
+        <p>Buggers, your browser does not support iframes :|</p>
+        </iframe>
+    </script>
 
-    </body>
+</body>
 </html>

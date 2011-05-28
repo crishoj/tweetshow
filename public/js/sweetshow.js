@@ -24,7 +24,7 @@
       }, this));
     },
     begin: function() {
-      var key, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
+      var key, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
       this.user = this.twitter.currentUser;
       $('#container').html(ich.mainTpl(this.user));
       $('#signout').click(__bind(function() {
@@ -49,14 +49,17 @@
         }, this));
       }
       _ref3 = ['left', 'k', 'backspace'];
-      _results = [];
       for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
         key = _ref3[_k];
-        _results.push($(document).bind('keyup', key, __bind(function() {
+        $(document).bind('keyup', key, __bind(function() {
           return this.next();
-        }, this)));
+        }, this));
       }
-      return _results;
+      return $('#tweet').live('mouseenter', function() {
+        return $('#tweet .actions').stop(true, true).fadeIn(200);
+      }).live('mouseleave', function() {
+        return $('#tweet .actions').stop(true, true).fadeOut(200);
+      });
     },
     registerHashtagLinkifier: function() {
       return $.extend($.fn.linkify.plugins, {
@@ -108,12 +111,45 @@
       }
       $('#contentarea').height($(window).height() - 220);
       this.twitter('.tweet').hovercards();
+      if (this.status.favorited) {
+        $('#tweet').addClass('favorited');
+        $('#tweet .actions a.favorite b').text('Unfavorite');
+      }
+      $('#tweet .actions a.favorite').click(__bind(function() {
+        return this.toggleFavorite();
+      }, this));
+      if (this.status.retweeted) {
+        $('#tweet').addClass('retweeted');
+      } else {
+        $('#tweet .actions a.retweet').click(__bind(function() {
+          return this.retweet();
+        }, this));
+      }
       this.toggleButton(this.hasPrevious(), $('.buttonprevious'), __bind(function() {
         return this.previous();
       }, this));
       return this.toggleButton(this.hasNext(), $('.buttonnext'), __bind(function() {
         return this.next();
       }, this));
+    },
+    retweet: function() {
+      this.status.retweet();
+      this.status.retweeted = true;
+      $('#tweet').addClass('retweeted');
+      return $('#tweet .actions a.retweet').unbind();
+    },
+    toggleFavorite: function() {
+      if (this.status.favorited) {
+        this.status.unfavorite();
+        this.status.favorited = false;
+        $('#tweet').removeClass('favorited');
+        return $('#tweet .actions a.favorite b').text('Favorite');
+      } else {
+        this.status.favorite();
+        this.status.favorited = true;
+        $('#tweet').addClass('favorited');
+        return $('#tweet .actions a.favorite b').text('Unfavorite');
+      }
     },
     hasNext: function() {
       return this.curIdx > 1;

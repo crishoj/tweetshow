@@ -30,6 +30,9 @@ window.Sweetshow =
       $(document).bind 'keyup', key, => @previous() 
     for key in ['left', 'k', 'backspace']
       $(document).bind 'keyup', key, => @next() 
+    $('#tweet')
+      .live('mouseenter', -> $('#tweet .actions').stop(true, true).fadeIn(200))
+      .live('mouseleave', -> $('#tweet .actions').stop(true, true).fadeOut(200))
 
   registerHashtagLinkifier: ->
     $.extend $.fn.linkify.plugins, 
@@ -71,11 +74,38 @@ window.Sweetshow =
       # Display tweet as content
       $('#contentarea').html e.addClass('big')
       $('#tweet').css('margin-top', -$('#tweet').height()/2)
-
     $('#contentarea').height($(window).height()-220)
     @twitter('.tweet').hovercards()
+    if @status.favorited
+      $('#tweet').addClass('favorited')
+      $('#tweet .actions a.favorite b').text('Unfavorite')
+    $('#tweet .actions a.favorite').click => @toggleFavorite()
+    if @status.retweeted
+      $('#tweet').addClass 'retweeted' 
+    else
+      $('#tweet .actions a.retweet').click => @retweet()
     @toggleButton @hasPrevious(), $('.buttonprevious'), => @previous()
     @toggleButton @hasNext(), $('.buttonnext'), => @next()
+
+  retweet: ->
+    @status.retweet()
+    # @Anywhere doesn't seem to maintain state, so force it
+    @status.retweeted = true
+    $('#tweet').addClass('retweeted')
+    $('#tweet .actions a.retweet').unbind()
+
+  toggleFavorite: ->
+    if @status.favorited
+      @status.unfavorite()
+      # @Anywhere doesn't seem to maintain state, so force it
+      @status.favorited = false
+      $('#tweet').removeClass('favorited')
+      $('#tweet .actions a.favorite b').text('Favorite')
+    else
+      @status.favorite()
+      @status.favorited = true 
+      $('#tweet').addClass('favorited')
+      $('#tweet .actions a.favorite b').text('Unfavorite')
 
   hasNext: -> 
     @curIdx > 1
