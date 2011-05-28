@@ -1,6 +1,7 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.Sweetshow = {
+    fetchCount: 20,
     init: function() {
       $.log('init');
       this.catchUnload();
@@ -33,7 +34,7 @@
       this.user.lists().each(function(list) {
         return $('#lists').append(ich.listTpl(list));
       });
-      this.showTimeline(this.user.homeTimeline());
+      this.showTimeline(this.user.homeTimeline);
       _ref = ['return', 'o'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         key = _ref[_i];
@@ -71,17 +72,15 @@
         }
       });
     },
-    showTimeline: function(timeline) {
+    showTimeline: function(callback) {
       $.log('showTimeline');
-      this.timeline = timeline;
-      return this.timeline.first(10, __bind(function(statuses) {
-        return this.handleStatuses(statuses);
+      this.timelineCallback = callback;
+      return this.timelineCallback({
+        count: this.fetchCount
+      }).first(this.fetchCount, __bind(function(statuses) {
+        this.statuses = statuses;
+        return this.showStatus(1);
       }, this));
-    },
-    handleStatuses: function(statuses) {
-      $.log('handleStatuses');
-      this.statuses = statuses;
-      return this.showStatus(1);
     },
     showStatus: function(idx) {
       var e;
@@ -128,8 +127,26 @@
       this.toggleButton(this.hasPrevious(), $('.buttonprevious'), __bind(function() {
         return this.previous();
       }, this));
-      return this.toggleButton(this.hasNext(), $('.buttonnext'), __bind(function() {
+      this.toggleButton(this.hasNext(), $('.buttonnext'), __bind(function() {
         return this.next();
+      }, this));
+      if (!this.hasPrevious(5)) {
+        return this.fetch();
+      }
+    },
+    fetch: function() {
+      if (this.fetching) {
+        return $.log('already fetching');
+      }
+      this.fetching = true;
+      $.log('fetching');
+      return this.timelineCallback({
+        count: this.fetchCount,
+        max_id: this.statuses.last().id
+      }).first(this.fetchCount, __bind(function(statuses) {
+        $.log("received another " + (statuses.length()) + " statuses");
+        this.statuses.array = this.statuses.array.concat(statuses.array);
+        return this.fetching = false;
       }, this));
     },
     retweet: function() {
@@ -151,11 +168,17 @@
         return $('#tweet .actions a.favorite b').text('Unfavorite');
       }
     },
-    hasNext: function() {
-      return this.curIdx > 1;
+    hasNext: function(count) {
+      if (count == null) {
+        count = 1;
+      }
+      return this.curIdx - count > 0;
     },
-    hasPrevious: function() {
-      return this.curIdx < this.statuses.length();
+    hasPrevious: function(count) {
+      if (count == null) {
+        count = 1;
+      }
+      return this.curIdx + count - 1 < this.statuses.length();
     },
     next: function() {
       if (this.hasNext()) {

@@ -1,4 +1,5 @@
 window.Sweetshow =
+  fetchCount: 20
 
   init: ->
     $.log 'init'
@@ -23,7 +24,7 @@ window.Sweetshow =
     $('#signout').click => @signout()
     @user.lists().each (list) ->
       $('#lists').append ich.listTpl(list)
-    @showTimeline @user.homeTimeline()
+    @showTimeline @user.homeTimeline
     for key in ['return', 'o']
       $(document).bind 'keyup', key, => @open() 
     for key in ['right', 'j', 'space']
@@ -42,15 +43,12 @@ window.Sweetshow =
           <a href="http://twitter.com/search?q=%23#{tag}" title="\##{tag}">#{hash+tag}</a>
         """
 
-  showTimeline: (timeline) ->
+  showTimeline: (callback) ->
     $.log 'showTimeline'
-    @timeline = timeline
-    @timeline.first 10, (statuses) => @handleStatuses(statuses)
-
-  handleStatuses: (statuses) ->
-    $.log 'handleStatuses'
-    @statuses = statuses
-    @showStatus 1
+    @timelineCallback = callback
+    @timelineCallback(count: @fetchCount).first @fetchCount, (statuses) => 
+      @statuses = statuses
+      @showStatus 1
 
   showStatus: (idx) -> 
     $.log "showStatus(#{idx}) out of #{@statuses.length()}: #{@statuses.get(idx).text}"
@@ -86,6 +84,19 @@ window.Sweetshow =
       $('#tweet .actions a.retweet').click => @retweet()
     @toggleButton @hasPrevious(), $('.buttonprevious'), => @previous()
     @toggleButton @hasNext(), $('.buttonnext'), => @next()
+    @fetch() unless @hasPrevious(5)
+
+  fetch: ->
+    return $.log('already fetching') if @fetching
+    @fetching = true
+    $.log('fetching')
+    @timelineCallback
+      count: @fetchCount
+      max_id: @statuses.last().id
+    .first @fetchCount, (statuses) => 
+      $.log("received another #{statuses.length()} statuses")
+      @statuses.array = @statuses.array.concat(statuses.array)
+      @fetching = false
 
   retweet: ->
     @status.retweet()
@@ -107,11 +118,11 @@ window.Sweetshow =
       $('#tweet').addClass('favorited')
       $('#tweet .actions a.favorite b').text('Unfavorite')
 
-  hasNext: -> 
-    @curIdx > 1
+  hasNext: (count = 1) -> 
+    @curIdx - count > 0
 
-  hasPrevious: ->
-    @curIdx < @statuses.length()
+  hasPrevious: (count = 1) ->
+    @curIdx + count - 1 < @statuses.length()
 
   next: ->
     if @hasNext()
