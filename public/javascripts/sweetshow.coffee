@@ -1,8 +1,9 @@
 window.Sweetshow =
-  fetchCount: 20
 
   init: ->
     $.log 'init'
+    @fetchCount = 20
+    @lists = {}
     @catchUnload()
     @registerHashtagLinkifier()
     twttr.anywhere (T) => 
@@ -22,8 +23,10 @@ window.Sweetshow =
     @user = @twitter.currentUser
     $('#container').html ich.mainTpl(@user)
     $('#signout').click => @signout()
-    @user.lists().each (list) ->
+    @user.lists().each (list) =>
       $('#lists').append ich.listTpl(list)
+      @lists[list.id] = list
+    $('#lists a').live 'click', (e) => @handleListChange(e)
     @showTimeline @user.homeTimeline
     for key in ['return', 'o']
       $(document).bind 'keyup', key, => @open() 
@@ -31,6 +34,7 @@ window.Sweetshow =
       $(document).bind 'keyup', key, => @previous() 
     for key in ['left', 'k', 'backspace']
       $(document).bind 'keyup', key, => @next() 
+    $(window).resize => @resize()
     $('#tweet')
       .live('mouseenter', -> $('#tweet .actions').stop(true, true).fadeIn(200))
       .live('mouseleave', -> $('#tweet .actions').stop(true, true).fadeOut(200))
@@ -42,6 +46,17 @@ window.Sweetshow =
         tmpl: (match, pre, hash, tag) -> pre + """
           <a href="http://twitter.com/search?q=%23#{tag}" title="\##{tag}">#{hash+tag}</a>
         """
+
+  handleListChange: (event) ->
+    listId = $(event.target).attr('listid') 
+    $.log("changing to list #{listId}")
+    if listId == 'home'
+      @showTimeline @user.homeTimeline
+      $('#currentList').text('home')
+    else
+      list = @lists[listId]
+      @showTimeline list.statuses
+      $('#currentList').text(list.name)
 
   showTimeline: (callback) ->
     $.log 'showTimeline'
@@ -172,5 +187,8 @@ window.Sweetshow =
     @ignoreUnload()
     twttr.anywhere.signOut()
     window.location.reload()
+
+  resize: ->
+    $("#contentarea").height($(window).height()-220)
 
 $(document).ready -> Sweetshow.init()

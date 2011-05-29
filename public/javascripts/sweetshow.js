@@ -1,9 +1,10 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.Sweetshow = {
-    fetchCount: 20,
     init: function() {
       $.log('init');
+      this.fetchCount = 20;
+      this.lists = {};
       this.catchUnload();
       this.registerHashtagLinkifier();
       return twttr.anywhere(__bind(function(T) {
@@ -31,9 +32,13 @@
       $('#signout').click(__bind(function() {
         return this.signout();
       }, this));
-      this.user.lists().each(function(list) {
-        return $('#lists').append(ich.listTpl(list));
-      });
+      this.user.lists().each(__bind(function(list) {
+        $('#lists').append(ich.listTpl(list));
+        return this.lists[list.id] = list;
+      }, this));
+      $('#lists a').live('click', __bind(function(e) {
+        return this.handleListChange(e);
+      }, this));
       this.showTimeline(this.user.homeTimeline);
       _ref = ['return', 'o'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -56,6 +61,9 @@
           return this.next();
         }, this));
       }
+      $(window).resize(__bind(function() {
+        return this.resize();
+      }, this));
       return $('#tweet').live('mouseenter', function() {
         return $('#tweet .actions').stop(true, true).fadeIn(200);
       }).live('mouseleave', function() {
@@ -71,6 +79,19 @@
           }
         }
       });
+    },
+    handleListChange: function(event) {
+      var list, listId;
+      listId = $(event.target).attr('listid');
+      $.log("changing to list " + listId);
+      if (listId === 'home') {
+        this.showTimeline(this.user.homeTimeline);
+        return $('#currentList').text('home');
+      } else {
+        list = this.lists[listId];
+        this.showTimeline(list.statuses);
+        return $('#currentList').text(list.name);
+      }
     },
     showTimeline: function(callback) {
       $.log('showTimeline');
@@ -236,6 +257,9 @@
       this.ignoreUnload();
       twttr.anywhere.signOut();
       return window.location.reload();
+    },
+    resize: function() {
+      return $("#contentarea").height($(window).height() - 220);
     }
   };
   $(document).ready(function() {

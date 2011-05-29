@@ -21,7 +21,6 @@
         <script src="javascripts/jquery.hotkeys.js"></script>
         <script src="javascripts/ICanHaz.js"></script>
         <script src="javascripts/date.js"></script>
-        <script src="javascripts/default.js"></script>
         <script src="javascripts/sweetshow.js"></script>
         <script type="text/javascript">
             //          var _gaq = _gaq || [];
@@ -50,20 +49,20 @@
         </div>
 
         <script type="text/html" id="listTpl">
-        <li><a href="#">{{name}}</a></li>
+        <li><a href="#" listid="{{id}}">{{name}}</a></li>
     </script>
 
     <script type="text/html" id="mainTpl">
         <nav id="menu">
             <ul class="adxm menu">
                 <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
-                <li class="toplevel item2"><a href="/">home</a>
+                <li class="toplevel item2"><a id="currentList" href="#">home</a>
                     <ul id="lists">
                         <li><a href="#">home</a></li>
                     </ul>
                 </li>
                 <li class="toplevel item3"><a href="/" id="signout">Log out</a></li>
-                <li class="toplevel item4"><a href="/slideshow/">Slideshow (Off)</a>
+                <li class="toplevel item4"><a href="#">Slideshow (Off)</a>
                     <ul>
                         <li><a href="#">On + Auto scroll 5 s.</a></li>
                         <li><a href="#">On + Auto scroll 10 s.</a></li>
