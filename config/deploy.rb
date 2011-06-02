@@ -1,5 +1,5 @@
-set :application, "sweetshow"
-set :repository,  "git@github.com:crishoj/sweetshow.git"
+set :application, "tweetshow"
+set :repository,  "git@github.com:crishoj/tweetshow.git"
 
 set :scm, :git
 set :branch, "master"
