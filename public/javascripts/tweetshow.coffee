@@ -1,11 +1,12 @@
-window.Sweetshow =
+window.Tweetshow =
 
   init: ->
     $.log 'init'
     @fetchCount = 20
     @lists = {}
-    @catchUnload()
     @registerHashtagLinkifier()
+    @fetchInterval = 60000
+    @newCount = 0
     twttr.anywhere (T) => 
       @twitter = T
       $.log 'anywhere loaded'
@@ -35,9 +36,14 @@ window.Sweetshow =
     for key in ['left', 'k', 'backspace']
       $(document).bind 'keyup', key, => @next() 
     $(window).resize => @resize()
+    @catchUnload()
+    @scheduleFetching()
     $('#tweet')
       .live('mouseenter', -> $('#tweet .actions').stop(true, true).fadeIn(200))
       .live('mouseleave', -> $('#tweet .actions').stop(true, true).fadeOut(200))
+
+  scheduleFetching: ->
+    window.setTimeout (=> @fetchNew()), @fetchInterval
 
   registerHashtagLinkifier: ->
     $.extend $.fn.linkify.plugins, 
@@ -101,6 +107,21 @@ window.Sweetshow =
     @toggleButton @hasNext(), $('.buttonnext'), => @next()
     @fetch() unless @hasPrevious(5)
 
+  fetchNew: ->
+    $.log('fetching new')
+    @timelineCallback
+      count: @fetchCount
+      since_id: @statuses.first().id
+    .first @fetchCount, (statuses) => 
+      $.log("received #{statuses.length()} new statuses")
+      if statuses.length() > 0
+        @statuses.array = statuses.array.concat(@statuses.array)
+        @curId += statuses.length()
+        @newCount += statuses.length()
+        $(".buttonnew .count").text(@newCount)
+        @enableButton $('.buttonnew'), => @showNew()
+      @scheduleFetching()
+
   fetch: ->
     return $.log('already fetching') if @fetching
     @fetching = true
@@ -147,6 +168,13 @@ window.Sweetshow =
     if @hasPrevious()
       @changeStatus(@curIdx+1)
 
+  showNew: ->
+    if @newCount > 0
+      @showStatus(idx)
+      @newCount = 0
+      $('.disablebutton .count').text(0)
+      @disableButton $('.buttonnew')
+
   hasLink: ->
     @links.length > 0
 
@@ -176,7 +204,7 @@ window.Sweetshow =
 
   catchUnload: ->
     $.log 'catching unload'
-    $(window).bind 'beforeunload', -> 'You (or the previewed tweet URL) is trying to leave Sweetshow. Do you wish to leave?'
+    $(window).bind 'beforeunload', -> 'You (or the previewed tweet URL) is trying to leave tweetshow. Do you wish to leave?'
 
   ignoreUnload: ->
     $.log 'ignoring unload'
@@ -191,4 +219,4 @@ window.Sweetshow =
   resize: ->
     $("#contentarea").height($(window).height()-220)
 
-$(document).ready -> Sweetshow.init()
+$(document).ready -> Tweetshow.init()

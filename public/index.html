@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Sweetshow</title>
+        <title>tweetshow.nu</title>
         <meta name="description" content="Flip through your tweets as a slideshow">
         <meta name="keywords" content="twitter slideshow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,26 +21,14 @@
         <script src="javascripts/jquery.hotkeys.js"></script>
         <script src="javascripts/ICanHaz.js"></script>
         <script src="javascripts/date.js"></script>
-        <script src="javascripts/sweetshow.js"></script>
-        <script type="text/javascript">
-            //          var _gaq = _gaq || [];
-            //          _gaq.push(['_setAccount', 'UA-23031830-1']);
-            //          _gaq.push(['_setDomainName', 'none']);
-            //          _gaq.push(['_setAllowLinker', true]);
-            //          _gaq.push(['_trackPageview']);
-            //          (function() {
-            //            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            //            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            //            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            //          })();
-        </script>
+        <script src="javascripts/tweetshow.js"></script>
     </head>
     <body>
         <header></header>
 
         <div id="container">
             <div id="frontpage">
-                <img src="images/logo.gif" width="302" height="46" alt="Logo">
+                <img id="logo" src="images/tweetshow.png" alt="tweetshow.nu">
                 <p>Flip though your tweets as a slideshow</p>
                 <div id="connect" style="display: none">
                     <span id="connectButton"></span>
@@ -48,38 +36,18 @@
             </div>
         </div>
 
-        <script type="text/html" id="listTpl">
-        <li><a href="#" listid="{{id}}">{{name}}</a></li>
-    </script>
-
     <script type="text/html" id="mainTpl">
         <nav id="menu">
             <ul class="adxm menu">
                 <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
-                <li class="toplevel item2"><a id="currentList" href="#">home</a>
-                    <ul id="lists">
-                        <li><a href="#">home</a></li>
-                    </ul>
-                </li>
                 <li class="toplevel item3"><a href="/" id="signout">Log out</a></li>
-                <li class="toplevel item4"><a href="#">Slideshow (Off)</a>
-                    <ul>
-                        <li><a href="#">On + Auto scroll 5 s.</a></li>
-                        <li><a href="#">On + Auto scroll 10 s.</a></li>
-                        <li><a href="#">On 5 s.</a></li>
-                        <li><a href="#">On 10 s</a></li>
-                        <li><a href="#">On 15 s. slide</a></li>
-                        <li><a href="#">Off</a></li>
-                    </ul>
-                </li>
             </ul>
         </nav>
         <div id="contentarea">
         </div>
         <footer id="footer">
             <button type="button" disabled="true" class="buttonnext disabled">Next</button>
-            <button type="button" disabled="true" class="buttonall disabled">All</button>
-            <button type="button" disabled="true" class="buttonnew disabled">New<br>0</button>
+            <button type="button" disabled="true" class="buttonnew disabled">New<br><span class="count">0</span></button>
             <div id="footerarea">
             </div>
             <button type="button" disabled="true" class="buttonprevious disabled">Previous</button>

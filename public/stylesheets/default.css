@@ -101,6 +101,8 @@ border:1px solid red;
 
 #frontpage { position:absolute; top:50%; left:50%; width:830px; height:420px; margin:-110px 0 0 -415px; text-align:center; }
 
+#logo { margin-bottom: 9px; }
+
 .input { 
 width:181px;
 height:20px;
@@ -111,7 +113,7 @@ font-size:18px;
 
 #logind, #chooselist { width:425px; float:left; text-align:left; margin-top:80px; } 
 	#logind  em, #chooselist em { width:100px; float:left; text-align:right; color:#909090; font-size:12px; margin-right:15px; padding-top:9px; }
-	#accountname { background:url("../images/twitter-login.gif") no-repeat 16px 13px; padding:13px 18px 13px 109px; margin-bottom:8px; }
+	#accountname { background:url("../images/twitter-login.png") no-repeat 16px 13px; padding:13px 18px 13px 109px; margin-bottom:8px; }
 	#accountpassword { width:219px; }
 
 #chooselist { width:385px;margin-left:20px;} 
@@ -129,10 +131,10 @@ font-size:18px;
 .submit {
 width:48px;
 height:48px;
-background:url("../images/button-submit-off.gif") no-repeat;
+background:url("../images/button-submit-off.png") no-repeat;
 border:none;
 }
-	.submit:hover { background-image:url("../images/button-submit-hover.gif"); }
+	.submit:hover { background-image:url("../images/button-submit-hover.png"); }
 
 /* *********
    STYLES
@@ -163,18 +165,18 @@ width:100%;
 clear:both;
 }
 	footer button { border:0; height:49px; width:49px; display:block; margin:71px 7px 0 0; padding:0; float:left; 
-                        background:url("../images/button-square.gif") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
-	footer button.enabled:hover { background:url("../images/button-square-hover.gif"); color:#fff; text-shadow:none; }
+                        background:url("../images/button-square.png") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
+	footer button.enabled:hover { background:url("../images/button-square-hover.png"); color:#fff; text-shadow:none; }
         footer button.disabled { color: #bcbcbc; }
-	footer button.buttonnext { width:145px; margin-left:21px; background:url("../images/button-left.gif") no-repeat; text-align:right; padding-right:16px; }
-	footer button.buttonnext.disabled { background:url("../images/button-left-disabled.gif") no-repeat; }
-	footer button.buttonnext.enabled:hover { background:url("../images/button-left-hover.gif") no-repeat; }
+	footer button.buttonnext { width:145px; margin-left:21px; background:url("../images/button-left.png") no-repeat; text-align:right; padding-right:16px; }
+	footer button.buttonnext.disabled { background:url("../images/button-left-disabled.png") no-repeat; }
+	footer button.buttonnext.enabled:hover { background:url("../images/button-left-hover.png") no-repeat; }
 
         footer button.buttonnew.disabled,
-        footer button.buttonall.disabled { background:url("../images/button-square-disabled.gif") no-repeat; }
+        footer button.buttonall.disabled { background:url("../images/button-square-disabled.png") no-repeat; }
 
-	footer button.buttonprevious { float:right; width:150px; height:50px; background:url("../images/button-right.gif") no-repeat; text-align:left; padding-left:16px; margin-right:25px; }
-	footer button.buttonprevious.enabled:hover { background:url("../images/button-right-hover.gif"); color:#fff; text-shadow:none; }
+	footer button.buttonprevious { float:right; width:150px; height:50px; background:url("../images/button-right.png") no-repeat; text-align:left; padding-left:16px; margin-right:25px; }
+	footer button.buttonprevious.enabled:hover { background:url("../images/button-right-hover.png"); color:#fff; text-shadow:none; }
 
 	a:link 		{ text-decoration:none; }
 	a:visited 	{ text-decoration:none; }
@@ -201,6 +203,7 @@ clear:both;
 	#tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; width:692px; }
 	#tweet.big p.text { font-size:36px; line-height:38px; }
 	#tweet.big p.urls { margin-bottom:7px; font-size:36px; }
+        #tweet.big img.profile { top: 45px; }
 
         #tweet i.bird { background-image: url("../images/bird_16_gray.png"); }
         #tweet .actions { display: none; }
@@ -215,7 +218,6 @@ clear:both;
         #tweet .actions .favorite span i { background-image: url("../images/favorite-sprite.png"); }
         #tweet .actions .retweet span i { background-image: url("../images/retweet-sprite.png"); }
         #tweet .actions .reply span i { background-image: url("../images/reply-sprite.png"); }
-/*        #tweet-actions { visibility: hidden; }*/
 
 /* *********
 	MENU
@@ -294,7 +296,7 @@ top: 0;
 	YOU SHOULD NOT STYLE the background of the ".menu UL" or this feature may not work properly!
 	if you do it, make sure you 110% know what you do */
 .menu ul {
-	background-image: url("../images/blank.gif");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
+	background-image: url("../images/blank.png");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
 	padding: 0px 0px 30px 30px;
 	margin: 0px 0 0 -30px;
 	/*background: #f00;	*//* uncomment this if you want to see the "safe" area.
@@ -398,14 +400,14 @@ border-left:0px;
 	.menu li.item4 li { margin-left:-49px; }
 	.menu li.item4 li:last-child { border-bottom:1px solid #909090;}
 
-.menu .item2, .menu .item4 { background:url("../images/icon-arrow-down.gif") right 10px no-repeat #fff; }
+.menu .item2, .menu .item4 { background:url("../images/icon-arrow-down.png") right 10px no-repeat #fff; }
 
 
 
-.menu .item2 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-digital.gif") 0px -36px no-repeat #fff;  }
+.menu .item2 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-digital.png") 0px -36px no-repeat #fff;  }
 .menu .item2 ul>li:first-child a:hover { background-position:0px 0px; }
 
-.menu .item4 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-slideshow.gif") 0px -36px no-repeat #fff;  }
+.menu .item4 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-slideshow.png") 0px -36px no-repeat #fff;  }
 .menu .item4 ul>li:first-child a:hover { background-position:0px 0px; }
 
 /* Fix for IE5/Mac \*//*/

@@ -22,7 +22,4 @@ config/*
 /public/404.html
 /public/422.html
 /public/500.html
-/public/images/
-/public/index.orig.html
-/public/js/jquery-ui-1.8.12.custom.min.js
 /Rakefile

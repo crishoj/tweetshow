@@ -1,12 +1,13 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  window.Sweetshow = {
+  window.Tweetshow = {
     init: function() {
       $.log('init');
       this.fetchCount = 20;
       this.lists = {};
-      this.catchUnload();
       this.registerHashtagLinkifier();
+      this.fetchInterval = 60000;
+      this.newCount = 0;
       return twttr.anywhere(__bind(function(T) {
         this.twitter = T;
         $.log('anywhere loaded');
@@ -64,11 +65,18 @@
       $(window).resize(__bind(function() {
         return this.resize();
       }, this));
+      this.catchUnload();
+      this.scheduleFetching();
       return $('#tweet').live('mouseenter', function() {
         return $('#tweet .actions').stop(true, true).fadeIn(200);
       }).live('mouseleave', function() {
         return $('#tweet .actions').stop(true, true).fadeOut(200);
       });
+    },
+    scheduleFetching: function() {
+      return window.setTimeout((__bind(function() {
+        return this.fetchNew();
+      }, this)), this.fetchInterval);
     },
     registerHashtagLinkifier: function() {
       return $.extend($.fn.linkify.plugins, {
@@ -155,6 +163,25 @@
         return this.fetch();
       }
     },
+    fetchNew: function() {
+      $.log('fetching new');
+      return this.timelineCallback({
+        count: this.fetchCount,
+        since_id: this.statuses.first().id
+      }).first(this.fetchCount, __bind(function(statuses) {
+        $.log("received " + (statuses.length()) + " new statuses");
+        if (statuses.length() > 0) {
+          this.statuses.array = statuses.array.concat(this.statuses.array);
+          this.curId += statuses.length();
+          this.newCount += statuses.length();
+          $(".buttonnew .count").text(this.newCount);
+          this.enableButton($('.buttonnew'), __bind(function() {
+            return this.showNew();
+          }, this));
+        }
+        return this.scheduleFetching();
+      }, this));
+    },
     fetch: function() {
       if (this.fetching) {
         return $.log('already fetching');
@@ -211,6 +238,14 @@
         return this.changeStatus(this.curIdx + 1);
       }
     },
+    showNew: function() {
+      if (this.newCount > 0) {
+        this.showStatus(idx);
+        this.newCount = 0;
+        $('.disablebutton .count').text(0);
+        return this.disableButton($('.buttonnew'));
+      }
+    },
     hasLink: function() {
       return this.links.length > 0;
     },
@@ -245,7 +280,7 @@
     catchUnload: function() {
       $.log('catching unload');
       return $(window).bind('beforeunload', function() {
-        return 'You (or the previewed tweet URL) is trying to leave Sweetshow. Do you wish to leave?';
+        return 'You (or the previewed tweet URL) is trying to leave tweetshow. Do you wish to leave?';
       });
     },
     ignoreUnload: function() {
@@ -263,6 +298,6 @@
     }
   };
   $(document).ready(function() {
-    return Sweetshow.init();
+    return Tweetshow.init();
   });
 }).call(this);
