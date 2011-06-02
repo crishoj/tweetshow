@@ -240,11 +240,13 @@
     },
     showNew: function() {
       if (this.newCount > 0) {
-        this.showStatus(idx);
-        this.newCount = 0;
-        $('.disablebutton .count').text(0);
-        return this.disableButton($('.buttonnew'));
+        this.changeStatus(1);
+        return this.newCount = 0;
       }
+    },
+    clearNew: function() {
+      $('.disablebutton .count').text(0);
+      return this.disableButton($('.buttonnew'));
     },
     hasLink: function() {
       return this.links.length > 0;
@@ -275,7 +277,10 @@
     changeStatus: function(idx) {
       $('#preview').remove();
       $('#tweet').remove();
-      return this.showStatus(idx);
+      this.showStatus(idx);
+      if (idx === 1) {
+        return this.clearNew();
+      }
     },
     catchUnload: function() {
       $.log('catching unload');

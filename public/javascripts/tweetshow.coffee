@@ -170,10 +170,12 @@ window.Tweetshow =
 
   showNew: ->
     if @newCount > 0
-      @showStatus(idx)
+      @changeStatus 1
       @newCount = 0
-      $('.disablebutton .count').text(0)
-      @disableButton $('.buttonnew')
+
+  clearNew: ->
+    $('.disablebutton .count').text(0)
+    @disableButton $('.buttonnew')
 
   hasLink: ->
     @links.length > 0
@@ -201,6 +203,7 @@ window.Tweetshow =
     $('#preview').remove()
     $('#tweet').remove()
     @showStatus(idx)
+    @clearNew() if idx == 1
 
   catchUnload: ->
     $.log 'catching unload'
