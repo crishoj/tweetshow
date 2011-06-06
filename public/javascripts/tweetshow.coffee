@@ -3,10 +3,10 @@ window.Tweetshow =
   init: ->
     $.log 'init'
     @fetchCount = 20
-    @lists = {}
     @registerHashtagLinkifier()
     @fetchInterval = 60000
     @newCount = 0
+    @statuses = []
     twttr.anywhere (T) => 
       $('#connect .loading').remove()
       @twitter = T
@@ -25,10 +25,6 @@ window.Tweetshow =
     @user = @twitter.currentUser
     $('#container').html ich.mainTpl(@user)
     $('#signout').click => @signout()
-    @user.lists().each (list) =>
-      $('#lists').append ich.listTpl(list)
-      @lists[list.id] = list
-    $('#lists a').live 'click', (e) => @handleListChange(e)
     @showTimeline @user.homeTimeline
     for key in ['return', 'o']
       $(document).bind 'keyup', key, => @open() 
@@ -66,16 +62,15 @@ window.Tweetshow =
       $('#currentList').text(list.name)
 
   showTimeline: (callback) ->
-    $.log 'showTimeline'
     @timelineCallback = callback
     @timelineCallback(count: @fetchCount).first @fetchCount, (statuses) => 
-      @statuses = statuses
-      @showStatus 1
+      @statuses = statuses.array
+      @showStatus 0
 
   showStatus: (idx) -> 
-    $.log "showStatus(#{idx}) out of #{@statuses.length()}: #{@statuses.get(idx).text}"
+    $.log "showStatus(#{idx}) out of #{@statuses.length}: #{@statuses[idx].id}/#{@statuses[idx].text[0..20]}"
     @curIdx = idx
-    @status = @statuses.get(@curIdx)
+    @status = @statuses[@curIdx]
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
     e = ich.tweetTpl(@status)
     e.find('.text')
@@ -109,17 +104,16 @@ window.Tweetshow =
     @fetch() unless @hasPrevious(5)
 
   fetchNew: ->
-    $.log('fetching new')
     @timelineCallback
       count: @fetchCount
-      since_id: @statuses.first().id
+      since_id: @statuses[0].id+1
     .first @fetchCount, (statuses) => 
-      $.log("received #{statuses.length()} new statuses")
-      if statuses.length() > 0
-        @statuses.array = statuses.array.concat(@statuses.array)
-        @curId += statuses.length()
-        @newCount += statuses.length()
-        $(".buttonnew .count").text(@newCount)
+      newStatuses = (status for status in statuses.array when status.id != @statuses[0].id)
+      $.log("received #{newStatuses.length} new statuses")
+      while status = newStatuses.pop()
+        @statuses.unshift status
+        @curIdx++ 
+        $(".buttonnew .count").text(++@newCount)
         @enableButton $('.buttonnew'), => @showNew()
       @scheduleFetching()
 
@@ -129,10 +123,10 @@ window.Tweetshow =
     $.log('fetching')
     @timelineCallback
       count: @fetchCount
-      max_id: @statuses.last().id
+      max_id: @statuses[@statuses.length-1].id
     .first @fetchCount, (statuses) => 
       $.log("received another #{statuses.length()} statuses")
-      @statuses.array = @statuses.array.concat(statuses.array)
+      @statuses = @statuses.concat(statuses.array)
       @fetching = false
 
   retweet: ->
@@ -156,10 +150,10 @@ window.Tweetshow =
       $('#tweet .actions a.favorite b').text('Unfavorite')
 
   hasNext: (count = 1) -> 
-    @curIdx - count > 0
+    @curIdx - count >= 0
 
   hasPrevious: (count = 1) ->
-    @curIdx + count - 1 < @statuses.length()
+    @curIdx + count < @statuses.length
 
   next: ->
     if @hasNext()
@@ -171,7 +165,7 @@ window.Tweetshow =
 
   showNew: ->
     if @newCount > 0
-      @changeStatus 1
+      @changeStatus 0
       @newCount = 0
 
   clearNew: ->
@@ -204,7 +198,7 @@ window.Tweetshow =
     $('#preview').remove()
     $('#tweet').remove()
     @showStatus(idx)
-    @clearNew() if idx == 1
+    @clearNew() if idx == 0
 
   catchUnload: ->
     $.log 'catching unload'

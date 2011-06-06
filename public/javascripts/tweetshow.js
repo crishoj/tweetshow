@@ -4,10 +4,10 @@
     init: function() {
       $.log('init');
       this.fetchCount = 20;
-      this.lists = {};
       this.registerHashtagLinkifier();
       this.fetchInterval = 60000;
       this.newCount = 0;
+      this.statuses = [];
       return twttr.anywhere(__bind(function(T) {
         $('#connect .loading').remove();
         this.twitter = T;
@@ -33,13 +33,6 @@
       $('#container').html(ich.mainTpl(this.user));
       $('#signout').click(__bind(function() {
         return this.signout();
-      }, this));
-      this.user.lists().each(__bind(function(list) {
-        $('#lists').append(ich.listTpl(list));
-        return this.lists[list.id] = list;
-      }, this));
-      $('#lists a').live('click', __bind(function(e) {
-        return this.handleListChange(e);
       }, this));
       this.showTimeline(this.user.homeTimeline);
       _ref = ['return', 'o'];
@@ -103,20 +96,19 @@
       }
     },
     showTimeline: function(callback) {
-      $.log('showTimeline');
       this.timelineCallback = callback;
       return this.timelineCallback({
         count: this.fetchCount
       }).first(this.fetchCount, __bind(function(statuses) {
-        this.statuses = statuses;
-        return this.showStatus(1);
+        this.statuses = statuses.array;
+        return this.showStatus(0);
       }, this));
     },
     showStatus: function(idx) {
       var e;
-      $.log("showStatus(" + idx + ") out of " + (this.statuses.length()) + ": " + (this.statuses.get(idx).text));
+      $.log("showStatus(" + idx + ") out of " + this.statuses.length + ": " + this.statuses[idx].id + "/" + this.statuses[idx].text.slice(0, 21));
       this.curIdx = idx;
-      this.status = this.statuses.get(this.curIdx);
+      this.status = this.statuses[this.curIdx];
       this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
       e = ich.tweetTpl(this.status);
       e.find('.text').linkify({
@@ -165,17 +157,28 @@
       }
     },
     fetchNew: function() {
-      $.log('fetching new');
       return this.timelineCallback({
         count: this.fetchCount,
-        since_id: this.statuses.first().id
+        since_id: this.statuses[0].id + 1
       }).first(this.fetchCount, __bind(function(statuses) {
-        $.log("received " + (statuses.length()) + " new statuses");
-        if (statuses.length() > 0) {
-          this.statuses.array = statuses.array.concat(this.statuses.array);
-          this.curId += statuses.length();
-          this.newCount += statuses.length();
-          $(".buttonnew .count").text(this.newCount);
+        var newStatuses, status;
+        newStatuses = (function() {
+          var _i, _len, _ref, _results;
+          _ref = statuses.array;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            status = _ref[_i];
+            if (status.id !== this.statuses[0].id) {
+              _results.push(status);
+            }
+          }
+          return _results;
+        }).call(this);
+        $.log("received " + newStatuses.length + " new statuses");
+        while (status = newStatuses.pop()) {
+          this.statuses.unshift(status);
+          this.curIdx++;
+          $(".buttonnew .count").text(++this.newCount);
           this.enableButton($('.buttonnew'), __bind(function() {
             return this.showNew();
           }, this));
@@ -191,10 +194,10 @@
       $.log('fetching');
       return this.timelineCallback({
         count: this.fetchCount,
-        max_id: this.statuses.last().id
+        max_id: this.statuses[this.statuses.length - 1].id
       }).first(this.fetchCount, __bind(function(statuses) {
         $.log("received another " + (statuses.length()) + " statuses");
-        this.statuses.array = this.statuses.array.concat(statuses.array);
+        this.statuses = this.statuses.concat(statuses.array);
         return this.fetching = false;
       }, this));
     },
@@ -221,13 +224,13 @@
       if (count == null) {
         count = 1;
       }
-      return this.curIdx - count > 0;
+      return this.curIdx - count >= 0;
     },
     hasPrevious: function(count) {
       if (count == null) {
         count = 1;
       }
-      return this.curIdx + count - 1 < this.statuses.length();
+      return this.curIdx + count < this.statuses.length;
     },
     next: function() {
       if (this.hasNext()) {
@@ -241,7 +244,7 @@
     },
     showNew: function() {
       if (this.newCount > 0) {
-        this.changeStatus(1);
+        this.changeStatus(0);
         return this.newCount = 0;
       }
     },
@@ -279,7 +282,7 @@
       $('#preview').remove();
       $('#tweet').remove();
       this.showStatus(idx);
-      if (idx === 1) {
+      if (idx === 0) {
         return this.clearNew();
       }
     },
