@@ -175,7 +175,7 @@ window.Tweetshow =
       @newCount = 0
 
   clearNew: ->
-    $('.disablebutton .count').text(0)
+    $('.buttonnew .count').text(0)
     @disableButton $('.buttonnew')
 
   hasLink: ->

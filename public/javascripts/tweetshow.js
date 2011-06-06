@@ -246,7 +246,7 @@
       }
     },
     clearNew: function() {
-      $('.disablebutton .count').text(0);
+      $('.buttonnew .count').text(0);
       return this.disableButton($('.buttonnew'));
     },
     hasLink: function() {
