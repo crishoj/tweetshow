@@ -2,7 +2,6 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.Tweetshow = {
     init: function() {
-      $.log('init');
       this.fetchCount = 20;
       this.registerHashtagLinkifier();
       this.fetchInterval = 60000;
@@ -11,12 +10,9 @@
       return twttr.anywhere(__bind(function(T) {
         $('#connect .loading').remove();
         this.twitter = T;
-        $.log('anywhere loaded');
         if (T.isConnected()) {
-          $.log('connected');
           return this.begin();
         } else {
-          $.log('not connected');
           $('#connect').show();
           return T("#connectButton").connectButton({
             size: "xlarge",
@@ -85,7 +81,6 @@
     handleListChange: function(event) {
       var list, listId;
       listId = $(event.target).attr('listid');
-      $.log("changing to list " + listId);
       if (listId === 'home') {
         this.showTimeline(this.user.homeTimeline);
         return $('#currentList').text('home');
@@ -106,7 +101,6 @@
     },
     showStatus: function(idx) {
       var e;
-      $.log("showStatus(" + idx + ") out of " + this.statuses.length + ": " + this.statuses[idx].id + "/" + this.statuses[idx].text.slice(0, 21));
       this.curIdx = idx;
       this.status = this.statuses[this.curIdx];
       this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
@@ -174,7 +168,6 @@
           }
           return _results;
         }).call(this);
-        $.log("received " + newStatuses.length + " new statuses");
         while (status = newStatuses.pop()) {
           this.statuses.unshift(status);
           this.curIdx++;
@@ -188,15 +181,13 @@
     },
     fetch: function() {
       if (this.fetching) {
-        return $.log('already fetching');
+        return;
       }
       this.fetching = true;
-      $.log('fetching');
       return this.timelineCallback({
         count: this.fetchCount,
         max_id: this.statuses[this.statuses.length - 1].id
       }).first(this.fetchCount, __bind(function(statuses) {
-        $.log("received another " + (statuses.length()) + " statuses");
         this.statuses = this.statuses.concat(statuses.array);
         return this.fetching = false;
       }, this));
@@ -287,17 +278,14 @@
       }
     },
     catchUnload: function() {
-      $.log('catching unload');
       return $(window).bind('beforeunload', function() {
         return 'You (or the previewed tweet URL) is trying to leave tweetshow. Do you wish to leave?';
       });
     },
     ignoreUnload: function() {
-      $.log('ignoring unload');
       return $(window).unbind('beforeunload');
     },
     signout: function() {
-      $.log('signout');
       this.ignoreUnload();
       twttr.anywhere.signOut();
       return window.location.reload();

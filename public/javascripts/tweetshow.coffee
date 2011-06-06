@@ -1,7 +1,6 @@
 window.Tweetshow =
 
   init: ->
-    $.log 'init'
     @fetchCount = 20
     @registerHashtagLinkifier()
     @fetchInterval = 60000
@@ -10,12 +9,9 @@ window.Tweetshow =
     twttr.anywhere (T) => 
       $('#connect .loading').remove()
       @twitter = T
-      $.log 'anywhere loaded'
       if T.isConnected()
-        $.log 'connected'
         @begin()
       else
-        $.log 'not connected'
         $('#connect').show()
         T("#connectButton").connectButton
           size: "xlarge"
@@ -52,7 +48,6 @@ window.Tweetshow =
 
   handleListChange: (event) ->
     listId = $(event.target).attr('listid') 
-    $.log("changing to list #{listId}")
     if listId == 'home'
       @showTimeline @user.homeTimeline
       $('#currentList').text('home')
@@ -68,7 +63,6 @@ window.Tweetshow =
       @showStatus 0
 
   showStatus: (idx) -> 
-    $.log "showStatus(#{idx}) out of #{@statuses.length}: #{@statuses[idx].id}/#{@statuses[idx].text[0..20]}"
     @curIdx = idx
     @status = @statuses[@curIdx]
     @status.createdAtISO = new Date(@status.createdAt).toISOString()
@@ -109,7 +103,6 @@ window.Tweetshow =
       since_id: @statuses[0].id+1
     .first @fetchCount, (statuses) => 
       newStatuses = (status for status in statuses.array when status.id != @statuses[0].id)
-      $.log("received #{newStatuses.length} new statuses")
       while status = newStatuses.pop()
         @statuses.unshift status
         @curIdx++ 
@@ -118,14 +111,12 @@ window.Tweetshow =
       @scheduleFetching()
 
   fetch: ->
-    return $.log('already fetching') if @fetching
+    return if @fetching
     @fetching = true
-    $.log('fetching')
     @timelineCallback
       count: @fetchCount
       max_id: @statuses[@statuses.length-1].id
     .first @fetchCount, (statuses) => 
-      $.log("received another #{statuses.length()} statuses")
       @statuses = @statuses.concat(statuses.array)
       @fetching = false
 
@@ -201,15 +192,12 @@ window.Tweetshow =
     @clearNew() if idx == 0
 
   catchUnload: ->
-    $.log 'catching unload'
     $(window).bind 'beforeunload', -> 'You (or the previewed tweet URL) is trying to leave tweetshow. Do you wish to leave?'
 
   ignoreUnload: ->
-    $.log 'ignoring unload'
     $(window).unbind 'beforeunload'
 
   signout: ->
-    $.log 'signout'
     @ignoreUnload()
     twttr.anywhere.signOut()
     window.location.reload()
