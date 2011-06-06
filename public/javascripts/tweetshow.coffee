@@ -8,6 +8,7 @@ window.Tweetshow =
     @fetchInterval = 60000
     @newCount = 0
     twttr.anywhere (T) => 
+      $('#connect .loading').remove()
       @twitter = T
       $.log 'anywhere loaded'
       if T.isConnected()

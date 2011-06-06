@@ -9,6 +9,7 @@
       this.fetchInterval = 60000;
       this.newCount = 0;
       return twttr.anywhere(__bind(function(T) {
+        $('#connect .loading').remove();
         this.twitter = T;
         $.log('anywhere loaded');
         if (T.isConnected()) {
