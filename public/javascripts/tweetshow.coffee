@@ -15,7 +15,9 @@ window.Tweetshow =
         $('#connect').show()
         T("#connectButton").connectButton
           size: "xlarge"
-          authComplete: => @begin()
+          authComplete: => 
+            @trackEvent('auth', 'connect')
+            @begin()
 
   begin: ->
     @user = @twitter.currentUser
@@ -23,11 +25,17 @@ window.Tweetshow =
     $('#signout').click => @signout()
     @showTimeline @user.homeTimeline
     for key in ['return', 'o']
-      $(document).bind 'keyup', key, => @open() 
+      $(document).bind 'keyup', key, => 
+        @trackEvent('ui', 'key', key)
+        @open() 
     for key in ['right', 'j', 'space']
-      $(document).bind 'keyup', key, => @previous() 
+      $(document).bind 'keyup', key, => 
+        @trackEvent('ui', 'key', key)
+        @previous() 
     for key in ['left', 'k', 'backspace']
-      $(document).bind 'keyup', key, => @next() 
+      $(document).bind 'keyup', key, => 
+        @trackEvent('ui', 'key', key)
+        @next() 
     $(window).resize => @resize()
     @catchUnload()
     @scheduleFetching()
@@ -98,17 +106,20 @@ window.Tweetshow =
     @fetch() unless @hasPrevious(5)
 
   fetchNew: ->
+    @trackEvent('api', 'fetchNew')
     @timelineCallback
       count: @fetchCount
       since_id: @statuses[0].id+1
     .first @fetchCount, (statuses) => 
       newStatuses = (status for status in statuses.array when status.id != @statuses[0].id)
-      while status = newStatuses.pop()
-        @statuses.unshift status
-        @curIdx++ 
-        $(".buttonnew .count").text(++@newCount)
+      if newStatuses.length > 0
+        @statuses = newStatuses.concat(@statuses)
+        @curIdx   += newStatuses.length
+        @newCount += newStatuses.length
+        $(".buttonnew .count").text(@newCount)
         @enableButton $('.buttonnew'), => @showNew()
-      @scheduleFetching()
+        @scheduleFetching()
+        @trackEvent('api', 'newFetched')
 
   fetch: ->
     return if @fetching
@@ -119,6 +130,7 @@ window.Tweetshow =
     .first @fetchCount, (statuses) => 
       @statuses = @statuses.concat(statuses.array)
       @fetching = false
+    @trackEvent('api', 'fetch')
 
   retweet: ->
     @status.retweet()
@@ -126,15 +138,18 @@ window.Tweetshow =
     @status.retweeted = true
     $('#tweet').addClass('retweeted')
     $('#tweet .actions a.retweet').unbind()
+    @trackEvent('status', 'retweet')
 
   toggleFavorite: ->
     if @status.favorited
+      @trackEvent('status', 'unfavourite')
       @status.unfavorite()
       # @Anywhere doesn't seem to maintain state, so force it
       @status.favorited = false
       $('#tweet').removeClass('favorited')
       $('#tweet .actions a.favorite b').text('Favorite')
     else
+      @trackEvent('status', 'favourite')
       @status.favorite()
       @status.favorited = true 
       $('#tweet').addClass('favorited')
@@ -149,15 +164,18 @@ window.Tweetshow =
   next: ->
     if @hasNext()
       @changeStatus(@curIdx-1)
+      @trackEvent('status', 'next')
 
   previous: ->
     if @hasPrevious()
       @changeStatus(@curIdx+1)
+      @trackEvent('status', 'previous')
 
   showNew: ->
     if @newCount > 0
       @changeStatus 0
       @newCount = 0
+      @trackEvent('status', 'new')
 
   clearNew: ->
     $('.buttonnew .count').text(0)
@@ -170,6 +188,7 @@ window.Tweetshow =
     if @hasLink()
       @ignoreUnload()
       window.location = @links[0].href 
+      @trackEvent('status', 'open')
 
   toggleButton: (enabled, elem, callback) ->
     if enabled
@@ -199,10 +218,14 @@ window.Tweetshow =
 
   signout: ->
     @ignoreUnload()
+    @trackEvent('auth', 'signout')
     twttr.anywhere.signOut()
     window.location.reload()
 
   resize: ->
     $("#contentarea").height($(window).height()-220)
+
+  trackEvent: (category, action) ->
+    _gaq.push('_trackEvent', category, action)
 
 $(document).ready -> Tweetshow.init()

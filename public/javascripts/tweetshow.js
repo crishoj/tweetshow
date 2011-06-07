@@ -17,6 +17,7 @@
           return T("#connectButton").connectButton({
             size: "xlarge",
             authComplete: __bind(function() {
+              this.trackEvent('auth', 'connect');
               return this.begin();
             }, this)
           });
@@ -35,6 +36,7 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         key = _ref[_i];
         $(document).bind('keyup', key, __bind(function() {
+          this.trackEvent('ui', 'key', key);
           return this.open();
         }, this));
       }
@@ -42,6 +44,7 @@
       for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
         key = _ref2[_j];
         $(document).bind('keyup', key, __bind(function() {
+          this.trackEvent('ui', 'key', key);
           return this.previous();
         }, this));
       }
@@ -49,6 +52,7 @@
       for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
         key = _ref3[_k];
         $(document).bind('keyup', key, __bind(function() {
+          this.trackEvent('ui', 'key', key);
           return this.next();
         }, this));
       }
@@ -151,6 +155,7 @@
       }
     },
     fetchNew: function() {
+      this.trackEvent('api', 'fetchNew');
       return this.timelineCallback({
         count: this.fetchCount,
         since_id: this.statuses[0].id + 1
@@ -168,15 +173,17 @@
           }
           return _results;
         }).call(this);
-        while (status = newStatuses.pop()) {
-          this.statuses.unshift(status);
-          this.curIdx++;
-          $(".buttonnew .count").text(++this.newCount);
+        if (newStatuses.length > 0) {
+          this.statuses = newStatuses.concat(this.statuses);
+          this.curIdx += newStatuses.length;
+          this.newCount += newStatuses.length;
+          $(".buttonnew .count").text(this.newCount);
           this.enableButton($('.buttonnew'), __bind(function() {
             return this.showNew();
           }, this));
+          this.scheduleFetching();
+          return this.trackEvent('api', 'newFetched');
         }
-        return this.scheduleFetching();
       }, this));
     },
     fetch: function() {
@@ -184,27 +191,31 @@
         return;
       }
       this.fetching = true;
-      return this.timelineCallback({
+      this.timelineCallback({
         count: this.fetchCount,
         max_id: this.statuses[this.statuses.length - 1].id
       }).first(this.fetchCount, __bind(function(statuses) {
         this.statuses = this.statuses.concat(statuses.array);
         return this.fetching = false;
       }, this));
+      return this.trackEvent('api', 'fetch');
     },
     retweet: function() {
       this.status.retweet();
       this.status.retweeted = true;
       $('#tweet').addClass('retweeted');
-      return $('#tweet .actions a.retweet').unbind();
+      $('#tweet .actions a.retweet').unbind();
+      return this.trackEvent('status', 'retweet');
     },
     toggleFavorite: function() {
       if (this.status.favorited) {
+        this.trackEvent('status', 'unfavourite');
         this.status.unfavorite();
         this.status.favorited = false;
         $('#tweet').removeClass('favorited');
         return $('#tweet .actions a.favorite b').text('Favorite');
       } else {
+        this.trackEvent('status', 'favourite');
         this.status.favorite();
         this.status.favorited = true;
         $('#tweet').addClass('favorited');
@@ -225,18 +236,21 @@
     },
     next: function() {
       if (this.hasNext()) {
-        return this.changeStatus(this.curIdx - 1);
+        this.changeStatus(this.curIdx - 1);
+        return this.trackEvent('status', 'next');
       }
     },
     previous: function() {
       if (this.hasPrevious()) {
-        return this.changeStatus(this.curIdx + 1);
+        this.changeStatus(this.curIdx + 1);
+        return this.trackEvent('status', 'previous');
       }
     },
     showNew: function() {
       if (this.newCount > 0) {
         this.changeStatus(0);
-        return this.newCount = 0;
+        this.newCount = 0;
+        return this.trackEvent('status', 'new');
       }
     },
     clearNew: function() {
@@ -249,7 +263,8 @@
     open: function() {
       if (this.hasLink()) {
         this.ignoreUnload();
-        return window.location = this.links[0].href;
+        window.location = this.links[0].href;
+        return this.trackEvent('status', 'open');
       }
     },
     toggleButton: function(enabled, elem, callback) {
@@ -287,11 +302,15 @@
     },
     signout: function() {
       this.ignoreUnload();
+      this.trackEvent('auth', 'signout');
       twttr.anywhere.signOut();
       return window.location.reload();
     },
     resize: function() {
       return $("#contentarea").height($(window).height() - 220);
+    },
+    trackEvent: function(category, action) {
+      return _gaq.push('_trackEvent', category, action);
     }
   };
   $(document).ready(function() {
