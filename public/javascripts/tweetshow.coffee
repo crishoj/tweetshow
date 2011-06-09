@@ -3,7 +3,7 @@ window.Tweetshow =
   init: ->
     @fetchCount = 20
     @registerHashtagLinkifier()
-    @fetchInterval = 60000
+    @fetchInterval = 30000
     @newCount = 0
     @statuses = []
     twttr.anywhere (T) => 
@@ -67,7 +67,7 @@ window.Tweetshow =
   showTimeline: (callback) ->
     @timelineCallback = callback
     @timelineCallback(count: @fetchCount).first @fetchCount, (statuses) => 
-      @statuses = statuses.array
+      @receive statuses.array
       @showStatus 0
 
   showStatus: (idx) -> 
@@ -107,30 +107,52 @@ window.Tweetshow =
 
   fetchNew: ->
     @trackEvent('api', 'fetchNew')
+    @debug("fetching new since #{@statuses[0].id}/#{@statuses[0].text[0..10]} (#{@statuses[0].createdAt})")
     @timelineCallback
       count: @fetchCount
-      since_id: @statuses[0].id+1
+      since_id: @statuses[0].id
     .first @fetchCount, (statuses) => 
       newStatuses = (status for status in statuses.array when status.id != @statuses[0].id)
+      @debug("#{statuses.array.length} received statuses filtered to #{newStatuses.length} new")
       if newStatuses.length > 0
-        @statuses = newStatuses.concat(@statuses)
-        @curIdx   += newStatuses.length
-        @newCount += newStatuses.length
-        $(".buttonnew .count").text(@newCount)
-        @enableButton $('.buttonnew'), => @showNew()
-        @scheduleFetching()
+        @receiveNew newStatuses
         @trackEvent('api', 'newFetched')
+      @scheduleFetching()
 
   fetch: ->
     return if @fetching
     @fetching = true
+    last = @statuses[@statuses.length-1]
+    @debug("fetching old before #{last.id}/#{last.text[0..10]} (#{last.createdAt})")
     @timelineCallback
       count: @fetchCount
-      max_id: @statuses[@statuses.length-1].id
+      max_id: last.id
     .first @fetchCount, (statuses) => 
-      @statuses = @statuses.concat(statuses.array)
+      @receive statuses.array
       @fetching = false
     @trackEvent('api', 'fetch')
+
+  receiveNew: (statuses) ->
+    @receive statuses, true
+
+  receive: (statuses, newer = false) ->
+    @debug("got #{statuses.length} statuses")
+    statuses = for status in statuses
+      # Monkey patch
+      status.id = status.idStr
+      status.attributes.id = status.attributes.id_str
+      status
+    return if statuses.count == 0
+    if @statuses.count == 0
+      @statuses = statuses
+    else if newer
+      @statuses = statuses.concat(@statuses)
+      @curIdx   += statuses.length
+      @newCount += statuses.length
+      $(".buttonnew .count").text(@newCount)
+      @enableButton $('.buttonnew'), => @showNew()
+    else
+      @statuses = @statuses.concat(statuses)
 
   retweet: ->
     @status.retweet()
@@ -227,5 +249,10 @@ window.Tweetshow =
 
   trackEvent: (category, action) ->
     _gaq.push('_trackEvent', category, action)
+
+  debug: (messages...) ->
+    return unless window.location.href.match '\.dev/'
+    return unless console?
+    console.log messages.join(' ')
 
 $(document).ready -> Tweetshow.init()

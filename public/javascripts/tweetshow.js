@@ -1,10 +1,10 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
   window.Tweetshow = {
     init: function() {
       this.fetchCount = 20;
       this.registerHashtagLinkifier();
-      this.fetchInterval = 60000;
+      this.fetchInterval = 30000;
       this.newCount = 0;
       this.statuses = [];
       return twttr.anywhere(__bind(function(T) {
@@ -99,7 +99,7 @@
       return this.timelineCallback({
         count: this.fetchCount
       }).first(this.fetchCount, __bind(function(statuses) {
-        this.statuses = statuses.array;
+        this.receive(statuses.array);
         return this.showStatus(0);
       }, this));
     },
@@ -156,9 +156,10 @@
     },
     fetchNew: function() {
       this.trackEvent('api', 'fetchNew');
+      this.debug("fetching new since " + this.statuses[0].id + "/" + this.statuses[0].text.slice(0, 11) + " (" + this.statuses[0].createdAt + ")");
       return this.timelineCallback({
         count: this.fetchCount,
-        since_id: this.statuses[0].id + 1
+        since_id: this.statuses[0].id
       }).first(this.fetchCount, __bind(function(statuses) {
         var newStatuses, status;
         newStatuses = (function() {
@@ -173,32 +174,67 @@
           }
           return _results;
         }).call(this);
+        this.debug("" + statuses.array.length + " received statuses filtered to " + newStatuses.length + " new");
         if (newStatuses.length > 0) {
-          this.statuses = newStatuses.concat(this.statuses);
-          this.curIdx += newStatuses.length;
-          this.newCount += newStatuses.length;
-          $(".buttonnew .count").text(this.newCount);
-          this.enableButton($('.buttonnew'), __bind(function() {
-            return this.showNew();
-          }, this));
-          this.scheduleFetching();
-          return this.trackEvent('api', 'newFetched');
+          this.receiveNew(newStatuses);
+          this.trackEvent('api', 'newFetched');
         }
+        return this.scheduleFetching();
       }, this));
     },
     fetch: function() {
+      var last;
       if (this.fetching) {
         return;
       }
       this.fetching = true;
+      last = this.statuses[this.statuses.length - 1];
+      this.debug("fetching old before " + last.id + "/" + last.text.slice(0, 11) + " (" + last.createdAt + ")");
       this.timelineCallback({
         count: this.fetchCount,
-        max_id: this.statuses[this.statuses.length - 1].id
+        max_id: last.id
       }).first(this.fetchCount, __bind(function(statuses) {
-        this.statuses = this.statuses.concat(statuses.array);
+        this.receive(statuses.array);
         return this.fetching = false;
       }, this));
       return this.trackEvent('api', 'fetch');
+    },
+    receiveNew: function(statuses) {
+      return this.receive(statuses, true);
+    },
+    receive: function(statuses, newer) {
+      var status;
+      if (newer == null) {
+        newer = false;
+      }
+      this.debug("got " + statuses.length + " statuses");
+      statuses = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = statuses.length; _i < _len; _i++) {
+          status = statuses[_i];
+          status.id = status.idStr;
+          status.attributes.id = status.attributes.id_str;
+          _results.push(status);
+        }
+        return _results;
+      })();
+      if (statuses.count === 0) {
+        return;
+      }
+      if (this.statuses.count === 0) {
+        return this.statuses = statuses;
+      } else if (newer) {
+        this.statuses = statuses.concat(this.statuses);
+        this.curIdx += statuses.length;
+        this.newCount += statuses.length;
+        $(".buttonnew .count").text(this.newCount);
+        return this.enableButton($('.buttonnew'), __bind(function() {
+          return this.showNew();
+        }, this));
+      } else {
+        return this.statuses = this.statuses.concat(statuses);
+      }
     },
     retweet: function() {
       this.status.retweet();
@@ -311,6 +347,17 @@
     },
     trackEvent: function(category, action) {
       return _gaq.push('_trackEvent', category, action);
+    },
+    debug: function() {
+      var messages;
+      messages = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (!window.location.href.match('\.dev/')) {
+        return;
+      }
+      if (typeof console == "undefined" || console === null) {
+        return;
+      }
+      return console.log(messages.join(' '));
     }
   };
   $(document).ready(function() {
