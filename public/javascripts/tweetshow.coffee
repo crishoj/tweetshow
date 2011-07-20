@@ -5,6 +5,7 @@ window.Tweetshow =
     @fetchCount = 20
     @registerHashtagLinkifier()
     @fetchInterval = 30000
+    @preloadDeley = 4000
     @newCount = 0
     @statuses = []
     twttr.anywhere (T) => 
@@ -73,26 +74,24 @@ window.Tweetshow =
 
   showStatus: (idx) -> 
     @curIdx = idx
-    @status = @statuses[@curIdx]
-    @status.createdAtISO = new Date(@status.createdAt).toISOString()
-    e = ich.tweetTpl(@status)
-    e.find('.text')
-      .linkify
-        use: []
-        handleLinks: (links) => @links = links.addClass('url').attr('target', '_blank')
-      .linkify
-        use: 'twitterHashtag'
-        handleLinks: (tags) -> tags.addClass('hashtag').attr('target', '_blank')
-    e.find("abbr.timeago").timeago()
-    if @hasLink() 
-      # Display tweet in footer, preview of last link as content
-      @link = @links[@links.length - 1]
-      $('#footerarea').html e
-      $('#contentarea').html ich.previewTpl(@link)
+    @status = @statuses[@curIdx]            
+    if @status.link?
+      # Display tweet in footer, preview of last link as content      
+      $('#footerarea').html @status.render()
+      if @status.preloaded()         
+        @debug('Found preload')
+        @status.preloadedElem().removeClass('preload').addClass('current')
+        @preload() 
+      else
+        @debug('No preload found')
+        $('#contentarea').html @status.renderPreview().addClass('current')
+        $('#contentarea .preload').remove()
+        window.setTimeout (=> @preload()), @preloadDelay 
     else 
       # Display tweet as content
-      $('#contentarea').html e.addClass('big')
+      $('#contentarea').html @status.render().addClass('big')
       $('#tweet').css('margin-top', -$('#tweet').height()/2)
+      @preload()
     $('#contentarea').height($(window).height()-220)
     @twitter('.tweet').hovercards()
     if @status.favorited
@@ -105,16 +104,26 @@ window.Tweetshow =
       $('#tweet .actions a.retweet').click => @retweet()
     @toggleButton @hasPrevious(), $('.buttonprevious'), => @previous()
     @toggleButton @hasNext(), $('.buttonnext'), => @next()
-    @fetch() unless @hasPrevious(5)
+    @fetch() unless @hasPrevious(5)    
+
+  preload: ->
+    for idx in [@curIdx+1...@curIdx+10]
+      candidate = @statuses[idx]
+      break unless candidate?
+      break if candidate.preloaded()
+      continue if not candidate.link?
+      @debug("Preloading #{candidate}...")
+      $('#contentarea').append candidate.preload()
+      break
 
   fetchNew: ->
     @trackEvent('api', 'fetchNew')
-    @debug("fetching new since #{@statuses[0].id}/#{@statuses[0].text[0..10]} (#{@statuses[0].createdAt})")
+    @debug("fetching new since #{@statuses[0]}")
     @timelineCallback
       count: @fetchCount
-      since_id: @statuses[0].id
+      since_id: @statuses[0].id()
     .first @fetchCount, (statuses) => 
-      newStatuses = (status for status in statuses.array when status.id != @statuses[0].id)
+      newStatuses = (s for s in statuses.array when s.id != @statuses[0].id())
       @debug("#{statuses.array.length} received statuses filtered to #{newStatuses.length} new")
       if newStatuses.length > 0
         @receiveNew newStatuses
@@ -125,10 +134,10 @@ window.Tweetshow =
     return if @fetching
     @fetching = true
     last = @statuses[@statuses.length-1]
-    @debug("fetching old before #{last.id}/#{last.text[0..10]} (#{last.createdAt})")
+    @debug("fetching old before #{last}")
     @timelineCallback
       count: @fetchCount
-      max_id: last.id
+      max_id: last.id()
     .first @fetchCount, (statuses) => 
       @receive statuses.array
       @fetching = false
@@ -139,11 +148,7 @@ window.Tweetshow =
 
   receive: (statuses, newer = false) ->
     @debug("got #{statuses.length} statuses")
-    statuses = for status in statuses
-      # Monkey patch
-      status.id = status.idStr
-      status.attributes.id = status.attributes.id_str
-      status
+    statuses = (new Status(s) for s in statuses)
     return if statuses.count == 0
     if @statuses.count == 0
       @statuses = statuses
@@ -158,26 +163,19 @@ window.Tweetshow =
 
   retweet: ->
     @status.retweet()
-    # @Anywhere doesn't seem to maintain state, so force it
-    @status.retweeted = true
     $('#tweet').addClass('retweeted')
     $('#tweet .actions a.retweet').unbind()
     @trackEvent('status', 'retweet')
 
   toggleFavorite: ->
-    if @status.favorited
-      @trackEvent('status', 'unfavourite')
-      @status.unfavorite()
-      # @Anywhere doesn't seem to maintain state, so force it
-      @status.favorited = false
-      $('#tweet').removeClass('favorited')
-      $('#tweet .actions a.favorite b').text('Favorite')
-    else
+    if @status.toggleFavorite()
       @trackEvent('status', 'favourite')
-      @status.favorite()
-      @status.favorited = true 
       $('#tweet').addClass('favorited')
       $('#tweet .actions a.favorite b').text('Unfavorite')
+    else
+      @trackEvent('status', 'unfavourite')
+      $('#tweet').removeClass('favorited')
+      $('#tweet .actions a.favorite b').text('Favorite')
 
   hasNext: (count = 1) -> 
     @curIdx - count >= 0
@@ -195,6 +193,12 @@ window.Tweetshow =
       @changeStatus(@curIdx+1)
       @trackEvent('status', 'previous')
 
+  open: ->
+    if @status.link?
+      @ignoreUnload()
+      window.location = @status.link.href 
+      @trackEvent('status', 'open')
+
   showNew: ->
     if @newCount > 0
       @changeStatus 0
@@ -204,15 +208,6 @@ window.Tweetshow =
   clearNew: ->
     $('.buttonnew .count').text(0)
     @disableButton $('.buttonnew')
-
-  hasLink: ->
-    @links.length > 0
-
-  open: ->
-    if @hasLink()
-      @ignoreUnload()
-      window.location = @link.href 
-      @trackEvent('status', 'open')
 
   toggleButton: (enabled, elem, callback) ->
     if enabled
@@ -229,7 +224,7 @@ window.Tweetshow =
       elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback)
 
   changeStatus: (idx) ->
-    $('#preview').remove()
+    $('#contentarea .current').remove()
     $('#tweet').remove()
     @showStatus(idx)
     @clearNew() if idx == 0
@@ -256,5 +251,65 @@ window.Tweetshow =
     return unless window.location.href.match '\.dev/'
     return unless console?
     console.log messages.join(' ')
+
+class Status
+
+  constructor: (@status) ->
+    # @Anywhere doesn't seem to maintain state, so we keep track in the wrapper
+    @favorited = @status.favorited
+    @retweeted = @status.retweeted
+    # Monkey patch
+    @status.id = @status.idStr
+    @status.attributes.id = @status.attributes.id_str
+    @status.createdAtISO = new Date(status.createdAt).toISOString()      
+    @render()
+
+  id: ->
+    @status.id
+
+  render: ->
+    unless @renderedStatus?
+      @renderedStatus = ich.tweetTpl(@status)
+      @renderedStatus.find('.text')
+        .linkify
+          use: []
+          handleLinks: (links) => 
+            @links = links.addClass('url').attr('target', '_blank')
+            @link = @links[@links.length - 1] if @links.length > 0
+        .linkify
+          use: 'twitterHashtag'
+          handleLinks: (tags) -> tags.addClass('hashtag').attr('target', '_blank')
+      @renderedStatus.find("abbr.timeago").timeago()
+    @renderedStatus
+
+  renderPreview: ->
+    @renderedPreview ?= ich.previewTpl(@link)
+
+  retweet: ->
+    @status.retweet()
+    @retweeted = true
+
+  toggleFavorite: ->
+    if @favorited
+      @status.unfavorite()
+      @favorited = false
+    else
+      @status.favorite()
+      @favorited = true
+    @favorited
+
+  preloaded: ->
+    @preloadedElem().length > 0 # check existence
+
+  preloadedElem: ->
+    $("#contentarea .s#{@id()}").first()
+
+  preload: ->    
+    $(@renderPreview())
+      .addClass('preload')
+      .addClass("s#{@id()}")    
+
+  toString: ->
+    "#{@status.id}/#{@status.text[0..10]} (#{@status.createdAt})"
 
 $(document).ready -> Tweetshow.init()

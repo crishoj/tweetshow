@@ -1,10 +1,12 @@
 (function() {
+  var Status;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
   window.Tweetshow = {
     init: function() {
       this.fetchCount = 20;
       this.registerHashtagLinkifier();
       this.fetchInterval = 30000;
+      this.preloadDeley = 4000;
       this.newCount = 0;
       this.statuses = [];
       return twttr.anywhere(__bind(function(T) {
@@ -104,30 +106,26 @@
       }, this));
     },
     showStatus: function(idx) {
-      var e;
       this.curIdx = idx;
       this.status = this.statuses[this.curIdx];
-      this.status.createdAtISO = new Date(this.status.createdAt).toISOString();
-      e = ich.tweetTpl(this.status);
-      e.find('.text').linkify({
-        use: [],
-        handleLinks: __bind(function(links) {
-          return this.links = links.addClass('url').attr('target', '_blank');
-        }, this)
-      }).linkify({
-        use: 'twitterHashtag',
-        handleLinks: function(tags) {
-          return tags.addClass('hashtag').attr('target', '_blank');
+      if (this.status.link != null) {
+        $('#footerarea').html(this.status.render());
+        if (this.status.preloaded()) {
+          this.debug('Found preload');
+          this.status.preloadedElem().removeClass('preload').addClass('current');
+          this.preload();
+        } else {
+          this.debug('No preload found');
+          $('#contentarea').html(this.status.renderPreview().addClass('current'));
+          $('#contentarea .preload').remove();
+          window.setTimeout((__bind(function() {
+            return this.preload();
+          }, this)), this.preloadDelay);
         }
-      });
-      e.find("abbr.timeago").timeago();
-      if (this.hasLink()) {
-        this.link = this.links[this.links.length - 1];
-        $('#footerarea').html(e);
-        $('#contentarea').html(ich.previewTpl(this.link));
       } else {
-        $('#contentarea').html(e.addClass('big'));
+        $('#contentarea').html(this.status.render().addClass('big'));
         $('#tweet').css('margin-top', -$('#tweet').height() / 2);
+        this.preload();
       }
       $('#contentarea').height($(window).height() - 220);
       this.twitter('.tweet').hovercards();
@@ -155,22 +153,42 @@
         return this.fetch();
       }
     },
+    preload: function() {
+      var candidate, idx, _ref, _ref2, _results;
+      _results = [];
+      for (idx = _ref = this.curIdx + 1, _ref2 = this.curIdx + 10; _ref <= _ref2 ? idx < _ref2 : idx > _ref2; _ref <= _ref2 ? idx++ : idx--) {
+        candidate = this.statuses[idx];
+        if (candidate == null) {
+          break;
+        }
+        if (candidate.preloaded()) {
+          break;
+        }
+        if (!(candidate.link != null)) {
+          continue;
+        }
+        this.debug("Preloading " + candidate + "...");
+        $('#contentarea').append(candidate.preload());
+        break;
+      }
+      return _results;
+    },
     fetchNew: function() {
       this.trackEvent('api', 'fetchNew');
-      this.debug("fetching new since " + this.statuses[0].id + "/" + this.statuses[0].text.slice(0, 11) + " (" + this.statuses[0].createdAt + ")");
+      this.debug("fetching new since " + this.statuses[0]);
       return this.timelineCallback({
         count: this.fetchCount,
-        since_id: this.statuses[0].id
+        since_id: this.statuses[0].id()
       }).first(this.fetchCount, __bind(function(statuses) {
-        var newStatuses, status;
+        var newStatuses, s;
         newStatuses = (function() {
           var _i, _len, _ref, _results;
           _ref = statuses.array;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            status = _ref[_i];
-            if (status.id !== this.statuses[0].id) {
-              _results.push(status);
+            s = _ref[_i];
+            if (s.id !== this.statuses[0].id()) {
+              _results.push(s);
             }
           }
           return _results;
@@ -190,10 +208,10 @@
       }
       this.fetching = true;
       last = this.statuses[this.statuses.length - 1];
-      this.debug("fetching old before " + last.id + "/" + last.text.slice(0, 11) + " (" + last.createdAt + ")");
+      this.debug("fetching old before " + last);
       this.timelineCallback({
         count: this.fetchCount,
-        max_id: last.id
+        max_id: last.id()
       }).first(this.fetchCount, __bind(function(statuses) {
         this.receive(statuses.array);
         return this.fetching = false;
@@ -204,7 +222,7 @@
       return this.receive(statuses, true);
     },
     receive: function(statuses, newer) {
-      var status;
+      var s;
       if (newer == null) {
         newer = false;
       }
@@ -213,10 +231,8 @@
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = statuses.length; _i < _len; _i++) {
-          status = statuses[_i];
-          status.id = status.idStr;
-          status.attributes.id = status.attributes.id_str;
-          _results.push(status);
+          s = statuses[_i];
+          _results.push(new Status(s));
         }
         return _results;
       })();
@@ -239,24 +255,19 @@
     },
     retweet: function() {
       this.status.retweet();
-      this.status.retweeted = true;
       $('#tweet').addClass('retweeted');
       $('#tweet .actions a.retweet').unbind();
       return this.trackEvent('status', 'retweet');
     },
     toggleFavorite: function() {
-      if (this.status.favorited) {
-        this.trackEvent('status', 'unfavourite');
-        this.status.unfavorite();
-        this.status.favorited = false;
-        $('#tweet').removeClass('favorited');
-        return $('#tweet .actions a.favorite b').text('Favorite');
-      } else {
+      if (this.status.toggleFavorite()) {
         this.trackEvent('status', 'favourite');
-        this.status.favorite();
-        this.status.favorited = true;
         $('#tweet').addClass('favorited');
         return $('#tweet .actions a.favorite b').text('Unfavorite');
+      } else {
+        this.trackEvent('status', 'unfavourite');
+        $('#tweet').removeClass('favorited');
+        return $('#tweet .actions a.favorite b').text('Favorite');
       }
     },
     hasNext: function(count) {
@@ -283,6 +294,13 @@
         return this.trackEvent('status', 'previous');
       }
     },
+    open: function() {
+      if (this.status.link != null) {
+        this.ignoreUnload();
+        window.location = this.status.link.href;
+        return this.trackEvent('status', 'open');
+      }
+    },
     showNew: function() {
       if (this.newCount > 0) {
         this.changeStatus(0);
@@ -293,16 +311,6 @@
     clearNew: function() {
       $('.buttonnew .count').text(0);
       return this.disableButton($('.buttonnew'));
-    },
-    hasLink: function() {
-      return this.links.length > 0;
-    },
-    open: function() {
-      if (this.hasLink()) {
-        this.ignoreUnload();
-        window.location = this.link.href;
-        return this.trackEvent('status', 'open');
-      }
     },
     toggleButton: function(enabled, elem, callback) {
       if (enabled) {
@@ -322,7 +330,7 @@
       }
     },
     changeStatus: function(idx) {
-      $('#preview').remove();
+      $('#contentarea .current').remove();
       $('#tweet').remove();
       this.showStatus(idx);
       if (idx === 0) {
@@ -361,6 +369,72 @@
       return console.log(messages.join(' '));
     }
   };
+  Status = (function() {
+    function Status(status) {
+      this.status = status;
+      this.favorited = this.status.favorited;
+      this.retweeted = this.status.retweeted;
+      this.status.id = this.status.idStr;
+      this.status.attributes.id = this.status.attributes.id_str;
+      this.status.createdAtISO = new Date(status.createdAt).toISOString();
+      this.render();
+    }
+    Status.prototype.id = function() {
+      return this.status.id;
+    };
+    Status.prototype.render = function() {
+      if (this.renderedStatus == null) {
+        this.renderedStatus = ich.tweetTpl(this.status);
+        this.renderedStatus.find('.text').linkify({
+          use: [],
+          handleLinks: __bind(function(links) {
+            this.links = links.addClass('url').attr('target', '_blank');
+            if (this.links.length > 0) {
+              return this.link = this.links[this.links.length - 1];
+            }
+          }, this)
+        }).linkify({
+          use: 'twitterHashtag',
+          handleLinks: function(tags) {
+            return tags.addClass('hashtag').attr('target', '_blank');
+          }
+        });
+        this.renderedStatus.find("abbr.timeago").timeago();
+      }
+      return this.renderedStatus;
+    };
+    Status.prototype.renderPreview = function() {
+      var _ref;
+      return (_ref = this.renderedPreview) != null ? _ref : this.renderedPreview = ich.previewTpl(this.link);
+    };
+    Status.prototype.retweet = function() {
+      this.status.retweet();
+      return this.retweeted = true;
+    };
+    Status.prototype.toggleFavorite = function() {
+      if (this.favorited) {
+        this.status.unfavorite();
+        this.favorited = false;
+      } else {
+        this.status.favorite();
+        this.favorited = true;
+      }
+      return this.favorited;
+    };
+    Status.prototype.preloaded = function() {
+      return this.preloadedElem().length > 0;
+    };
+    Status.prototype.preloadedElem = function() {
+      return $("#contentarea .s" + (this.id())).first();
+    };
+    Status.prototype.preload = function() {
+      return $(this.renderPreview()).addClass('preload').addClass("s" + (this.id()));
+    };
+    Status.prototype.toString = function() {
+      return "" + this.status.id + "/" + this.status.text.slice(0, 11) + " (" + this.status.createdAt + ")";
+    };
+    return Status;
+  })();
   $(document).ready(function() {
     return Tweetshow.init();
   });

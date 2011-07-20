@@ -152,6 +152,8 @@ z-index:1;
 #contentarea { overflow:hidden; margin-top:48px; background-color:#f4f4f4; }
 iframe { height:100%; width:100%; }
 
+.preload { display: none; }
+
 /* *********
    FOOTER 196px
 ********** */
