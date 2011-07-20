@@ -122,8 +122,9 @@
       });
       e.find("abbr.timeago").timeago();
       if (this.hasLink()) {
+        this.link = this.links[this.links.length - 1];
         $('#footerarea').html(e);
-        $('#contentarea').html(ich.previewTpl(this.links[0]));
+        $('#contentarea').html(ich.previewTpl(this.link));
       } else {
         $('#contentarea').html(e.addClass('big'));
         $('#tweet').css('margin-top', -$('#tweet').height() / 2);
@@ -299,7 +300,7 @@
     open: function() {
       if (this.hasLink()) {
         this.ignoreUnload();
-        window.location = this.links[0].href;
+        window.location = this.link.href;
         return this.trackEvent('status', 'open');
       }
     },
@@ -354,7 +355,7 @@
       if (!window.location.href.match('\.dev/')) {
         return;
       }
-      if (typeof console == "undefined" || console === null) {
+      if (typeof console === "undefined" || console === null) {
         return;
       }
       return console.log(messages.join(' '));

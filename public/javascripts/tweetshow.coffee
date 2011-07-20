@@ -1,3 +1,4 @@
+
 window.Tweetshow =
 
   init: ->
@@ -84,9 +85,10 @@ window.Tweetshow =
         handleLinks: (tags) -> tags.addClass('hashtag').attr('target', '_blank')
     e.find("abbr.timeago").timeago()
     if @hasLink() 
-      # Display tweet in footer, preview as content
+      # Display tweet in footer, preview of last link as content
+      @link = @links[@links.length - 1]
       $('#footerarea').html e
-      $('#contentarea').html ich.previewTpl(@links[0])
+      $('#contentarea').html ich.previewTpl(@link)
     else 
       # Display tweet as content
       $('#contentarea').html e.addClass('big')
@@ -209,7 +211,7 @@ window.Tweetshow =
   open: ->
     if @hasLink()
       @ignoreUnload()
-      window.location = @links[0].href 
+      window.location = @link.href 
       @trackEvent('status', 'open')
 
   toggleButton: (enabled, elem, callback) ->
