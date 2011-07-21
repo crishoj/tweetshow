@@ -5,7 +5,7 @@ window.Tweetshow =
     @fetchCount = 20
     @registerHashtagLinkifier()
     @fetchInterval = 30000
-    @preloadDeley = 4000
+    @preloadDelay = 4000
     @newCount = 0
     @statuses = []
     twttr.anywhere (T) => 
@@ -78,18 +78,17 @@ window.Tweetshow =
     if @status.link?
       # Display tweet in footer, preview of last link as content      
       $('#footerarea').html @status.render()
-      if @status.preloaded()         
+      if @status.previewLoaded()         
         @debug('Found preload')
-        @status.preloadedElem().removeClass('preload').addClass('current')
+        @status.previewElem().addClass('current')
         @preload() 
       else
         @debug('No preload found')
-        $('#contentarea').html @status.renderPreview().addClass('current')
-        $('#contentarea .preload').remove()
-        window.setTimeout (=> @preload()), @preloadDelay 
+        $('#contentarea').append @status.renderPreview().addClass('current')        
+        window.setTimeout (=> @preload()), @preloadDelay
     else 
       # Display tweet as content
-      $('#contentarea').html @status.render().addClass('big')
+      $('#contentarea').prepend @status.render().addClass('big')
       $('#tweet').css('margin-top', -$('#tweet').height()/2)
       @preload()
     $('#contentarea').height($(window).height()-220)
@@ -107,18 +106,28 @@ window.Tweetshow =
     @fetch() unless @hasPrevious(5)    
 
   preload: ->
-    for idx in [@curIdx+1...@curIdx+10]
+    @debug "Commencing preload"
+    keep = []
+    preloading = false
+    for idx in [@curIdx-1...@curIdx+10]
+      break if keep.length >= 3
       candidate = @statuses[idx]
-      break unless candidate?
-      break if candidate.preloaded()
+      continue unless candidate?
       continue if not candidate.link?
-      @debug("Preloading #{candidate}...")
-      $('#contentarea').append candidate.preload()
-      break
+      keep.push candidate.id()
+      continue if candidate.previewLoaded()
+      unless preloading 
+        @debug("Preloading #{candidate}...")
+        preloading = true
+        $('#contentarea').append candidate.renderPreview()
+    @debug "Statuses to keep: #{keep.join ', '}"
+    for status in @statuses
+      if status.previewLoaded() 
+        status.unloadPreview() unless status.id() in keep
 
   fetchNew: ->
     @trackEvent('api', 'fetchNew')
-    @debug("fetching new since #{@statuses[0]}")
+    #@debug("fetching new since #{@statuses[0]}")
     @timelineCallback
       count: @fetchCount
       since_id: @statuses[0].id()
@@ -224,7 +233,7 @@ window.Tweetshow =
       elem.removeAttr("disabled").removeClass('disabled').addClass('enabled').bind('click', callback)
 
   changeStatus: (idx) ->
-    $('#contentarea .current').remove()
+    $('#contentarea .current').removeClass('current')
     $('#tweet').remove()
     @showStatus(idx)
     @clearNew() if idx == 0
@@ -283,7 +292,7 @@ class Status
     @renderedStatus
 
   renderPreview: ->
-    @renderedPreview ?= ich.previewTpl(@link)
+    @renderedPreview ?= $(ich.previewTpl(@link)).addClass("s#{@id()}")
 
   retweet: ->
     @status.retweet()
@@ -298,16 +307,15 @@ class Status
       @favorited = true
     @favorited
 
-  preloaded: ->
-    @preloadedElem().length > 0 # check existence
+  previewLoaded: ->
+    @previewElem().length > 0 # check existence
 
-  preloadedElem: ->
-    $("#contentarea .s#{@id()}").first()
+  previewElem: ->
+    $(".preview.s#{@id()}").first()
 
-  preload: ->    
-    $(@renderPreview())
-      .addClass('preload')
-      .addClass("s#{@id()}")    
+  unloadPreview: ->
+    Tweetshow.debug "Unloading #{@}"
+    @previewElem().remove()
 
   toString: ->
     "#{@status.id}/#{@status.text[0..10]} (#{@status.createdAt})"

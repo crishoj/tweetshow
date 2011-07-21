@@ -152,7 +152,8 @@ header {
 #contentarea { overflow:hidden; margin-top:48px; background-color:#f4f4f4; }
 iframe { height:100%; width:100%; }
 
-.preload { display: none; }
+.preview { display: none; }
+.preview.current { display: block; }
 
 /* *********
    FOOTER 196px

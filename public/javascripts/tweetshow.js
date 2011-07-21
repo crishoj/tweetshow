@@ -1,12 +1,17 @@
 (function() {
   var Status;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
+  }, __slice = Array.prototype.slice;
   window.Tweetshow = {
     init: function() {
       this.fetchCount = 20;
       this.registerHashtagLinkifier();
       this.fetchInterval = 30000;
-      this.preloadDeley = 4000;
+      this.preloadDelay = 4000;
       this.newCount = 0;
       this.statuses = [];
       return twttr.anywhere(__bind(function(T) {
@@ -110,20 +115,19 @@
       this.status = this.statuses[this.curIdx];
       if (this.status.link != null) {
         $('#footerarea').html(this.status.render());
-        if (this.status.preloaded()) {
+        if (this.status.previewLoaded()) {
           this.debug('Found preload');
-          this.status.preloadedElem().removeClass('preload').addClass('current');
+          this.status.previewElem().addClass('current');
           this.preload();
         } else {
           this.debug('No preload found');
-          $('#contentarea').html(this.status.renderPreview().addClass('current'));
-          $('#contentarea .preload').remove();
+          $('#contentarea').append(this.status.renderPreview().addClass('current'));
           window.setTimeout((__bind(function() {
             return this.preload();
           }, this)), this.preloadDelay);
         }
       } else {
-        $('#contentarea').html(this.status.render().addClass('big'));
+        $('#contentarea').prepend(this.status.render().addClass('big'));
         $('#tweet').css('margin-top', -$('#tweet').height() / 2);
         this.preload();
       }
@@ -154,28 +158,42 @@
       }
     },
     preload: function() {
-      var candidate, idx, _ref, _ref2, _results;
-      _results = [];
-      for (idx = _ref = this.curIdx + 1, _ref2 = this.curIdx + 10; _ref <= _ref2 ? idx < _ref2 : idx > _ref2; _ref <= _ref2 ? idx++ : idx--) {
-        candidate = this.statuses[idx];
-        if (candidate == null) {
+      var candidate, idx, keep, preloading, status, _i, _len, _ref, _ref2, _ref3, _ref4, _results;
+      this.debug("Commencing preload");
+      keep = [];
+      preloading = false;
+      for (idx = _ref = this.curIdx - 1, _ref2 = this.curIdx + 10; _ref <= _ref2 ? idx < _ref2 : idx > _ref2; _ref <= _ref2 ? idx++ : idx--) {
+        if (keep.length >= 3) {
           break;
         }
-        if (candidate.preloaded()) {
-          break;
+        candidate = this.statuses[idx];
+        if (candidate == null) {
+          continue;
         }
         if (!(candidate.link != null)) {
           continue;
         }
-        this.debug("Preloading " + candidate + "...");
-        $('#contentarea').append(candidate.preload());
-        break;
+        keep.push(candidate.id());
+        if (candidate.previewLoaded()) {
+          continue;
+        }
+        if (!preloading) {
+          this.debug("Preloading " + candidate + "...");
+          preloading = true;
+          $('#contentarea').append(candidate.renderPreview());
+        }
+      }
+      this.debug("Statuses to keep: " + (keep.join(', ')));
+      _ref3 = this.statuses;
+      _results = [];
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        status = _ref3[_i];
+        _results.push(status.previewLoaded() ? (_ref4 = status.id(), __indexOf.call(keep, _ref4) < 0) ? status.unloadPreview() : void 0 : void 0);
       }
       return _results;
     },
     fetchNew: function() {
       this.trackEvent('api', 'fetchNew');
-      this.debug("fetching new since " + this.statuses[0]);
       return this.timelineCallback({
         count: this.fetchCount,
         since_id: this.statuses[0].id()
@@ -330,7 +348,7 @@
       }
     },
     changeStatus: function(idx) {
-      $('#contentarea .current').remove();
+      $('#contentarea .current').removeClass('current');
       $('#tweet').remove();
       this.showStatus(idx);
       if (idx === 0) {
@@ -405,7 +423,7 @@
     };
     Status.prototype.renderPreview = function() {
       var _ref;
-      return (_ref = this.renderedPreview) != null ? _ref : this.renderedPreview = ich.previewTpl(this.link);
+      return (_ref = this.renderedPreview) != null ? _ref : this.renderedPreview = $(ich.previewTpl(this.link)).addClass("s" + (this.id()));
     };
     Status.prototype.retweet = function() {
       this.status.retweet();
@@ -421,14 +439,15 @@
       }
       return this.favorited;
     };
-    Status.prototype.preloaded = function() {
-      return this.preloadedElem().length > 0;
+    Status.prototype.previewLoaded = function() {
+      return this.previewElem().length > 0;
     };
-    Status.prototype.preloadedElem = function() {
-      return $("#contentarea .s" + (this.id())).first();
+    Status.prototype.previewElem = function() {
+      return $(".preview.s" + (this.id())).first();
     };
-    Status.prototype.preload = function() {
-      return $(this.renderPreview()).addClass('preload').addClass("s" + (this.id()));
+    Status.prototype.unloadPreview = function() {
+      Tweetshow.debug("Unloading " + this);
+      return this.previewElem().remove();
     };
     Status.prototype.toString = function() {
       return "" + this.status.id + "/" + this.status.text.slice(0, 11) + " (" + this.status.createdAt + ")";
