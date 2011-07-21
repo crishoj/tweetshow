@@ -7,17 +7,17 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-  display: block;
+    display: block;
 }
 
 blockquote, q { quotes: none; }
@@ -87,16 +87,16 @@ html, body { height:100%; overflow:hidden; }
 body { background-color:#e8e8e8; margin:0px 24px 24px 24px; }
 
 #container {
-position:relative;
-height:100%;
-margin-top:-48px;
-background-color:#fff;
+    position:relative;
+    height:100%;
+    margin-top:-48px;
+    background-color:#fff;
 }
 #main {
-margin-top:48px;
-background-color:#f4f4f4;
-height:50%;
-border:1px solid red;
+    margin-top:48px;
+    background-color:#f4f4f4;
+    height:50%;
+    border:1px solid red;
 }
 
 #frontpage { position:absolute; top:50%; left:50%; width:830px; height:420px; margin:-110px 0 0 -415px; text-align:center; }
@@ -104,50 +104,50 @@ border:1px solid red;
 #logo { margin-bottom: 9px; }
 
 .input { 
-width:181px;
-height:20px;
-padding:13px 18px 13px 18px;
-border:1px solid #909090; border-radius:0px; -moz-box-shadow:-2px 2px 0px #909090; -webkit-box-shadow:-2px 2px 0px #909090; box-shadow:-2px 2px 0px #909090;
-font-size:18px;
+    width:181px;
+    height:20px;
+    padding:13px 18px 13px 18px;
+    border:1px solid #909090; border-radius:0px; -moz-box-shadow:-2px 2px 0px #909090; -webkit-box-shadow:-2px 2px 0px #909090; box-shadow:-2px 2px 0px #909090;
+    font-size:18px;
 }
 
 #logind, #chooselist { width:425px; float:left; text-align:left; margin-top:80px; } 
-	#logind  em, #chooselist em { width:100px; float:left; text-align:right; color:#909090; font-size:12px; margin-right:15px; padding-top:9px; }
-	#accountname { background:url("../images/twitter-login.png") no-repeat 16px 13px; padding:13px 18px 13px 109px; margin-bottom:8px; }
-	#accountpassword { width:219px; }
+#logind  em, #chooselist em { width:100px; float:left; text-align:right; color:#909090; font-size:12px; margin-right:15px; padding-top:9px; }
+#accountname { background:url("../images/twitter-login.png") no-repeat 16px 13px; padding:13px 18px 13px 109px; margin-bottom:8px; }
+#accountpassword { width:219px; }
 
 #chooselist { width:385px;margin-left:20px;} 
-	#chooselist em { width:50px; }
-	#chooselist.disabled #disabled { z-index:20; position:absolute; margin-left:65px; background-color:#999; width:282px; height:46px; opacity:.3; }
-	#listitem {
-	width:280px;
-	padding:13px 18px 13px 18px;
-	border:1px solid #909090;
-	}
-	
+#chooselist em { width:50px; }
+#chooselist.disabled #disabled { z-index:20; position:absolute; margin-left:65px; background-color:#999; width:282px; height:46px; opacity:.3; }
+#listitem {
+    width:280px;
+    padding:13px 18px 13px 18px;
+    border:1px solid #909090;
+}
+
 #message { clear:both; border:1px solid #C96; padding:14px; width:280px; margin:0 auto; margin:20px 0 0 114px; float:left; }
-	#message p { padding:0; margin:0; color:red; font-weight:800;  }
+#message p { padding:0; margin:0; color:red; font-weight:800;  }
 
 .submit {
-width:48px;
-height:48px;
-background:url("../images/button-submit-off.png") no-repeat;
-border:none;
+    width:48px;
+    height:48px;
+    background:url("../images/button-submit-off.png") no-repeat;
+    border:none;
 }
-	.submit:hover { background-image:url("../images/button-submit-hover.png"); }
+.submit:hover { background-image:url("../images/button-submit-hover.png"); }
 
 /* *********
    STYLES
 ********** */
 header {
-position:relative; 
-height:24px;
-background-color:#e8e8e8;
-z-index:1;
+    position:relative; 
+    height:24px;
+    background-color:#e8e8e8;
+    z-index:1;
 }
 
 #article { position:relative; width:520px; float:left; padding:22px 0px 15px 0px; background-color:#FFF; }
-	#article .padding { padding:0px 10px 20px 20px; }
+#article .padding { padding:0px 10px 20px 20px; }
 
 #contentarea { overflow:hidden; margin-top:48px; background-color:#f4f4f4; }
 iframe { height:100%; width:100%; }
@@ -158,155 +158,155 @@ iframe { height:100%; width:100%; }
    FOOTER 196px
 ********** */
 footer {
-position:absolute;
-bottom:0px;
-margin:0 auto;
-height:220px;
-background-color:#e8e8e8;
-width:100%;
-clear:both;
+    position:absolute;
+    bottom:0px;
+    margin:0 auto;
+    height:220px;
+    background-color:#e8e8e8;
+    width:100%;
+    clear:both;
 }
-	footer button { border:0; height:49px; width:49px; display:block; margin:71px 7px 0 0; padding:0; float:left; 
-                        background:url("../images/button-square.png") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
-	footer button.enabled:hover { background:url("../images/button-square-hover.png"); color:#fff; text-shadow:none; }
-        footer button.disabled { color: #bcbcbc; }
-	footer button.buttonnext { width:145px; margin-left:21px; background:url("../images/button-left.png") no-repeat; text-align:right; padding-right:16px; }
-	footer button.buttonnext.disabled { background:url("../images/button-left-disabled.png") no-repeat; }
-	footer button.buttonnext.enabled:hover { background:url("../images/button-left-hover.png") no-repeat; }
+footer button { border:0; height:49px; width:49px; display:block; margin:71px 7px 0 0; padding:0; float:left; 
+                background:url("../images/button-square.png") no-repeat; font-size:12px; text-shadow:-1px 1px 0px #fff; color:#888; }
+footer button.enabled:hover { background:url("../images/button-square-hover.png"); color:#fff; text-shadow:none; }
+footer button.disabled { color: #bcbcbc; }
+footer button.buttonnext { width:145px; margin-left:21px; background:url("../images/button-left.png") no-repeat; text-align:right; padding-right:16px; }
+footer button.buttonnext.disabled { background:url("../images/button-left-disabled.png") no-repeat; }
+footer button.buttonnext.enabled:hover { background:url("../images/button-left-hover.png") no-repeat; }
 
-        footer button.buttonnew.disabled,
-        footer button.buttonall.disabled { background:url("../images/button-square-disabled.png") no-repeat; }
+footer button.buttonnew.disabled,
+footer button.buttonall.disabled { background:url("../images/button-square-disabled.png") no-repeat; }
 
-	footer button.buttonprevious { float:right; width:150px; height:50px; background:url("../images/button-right.png") no-repeat; text-align:left; padding-left:16px; margin-right:25px; }
-	footer button.buttonprevious.enabled:hover { background:url("../images/button-right-hover.png"); color:#fff; text-shadow:none; }
+footer button.buttonprevious { float:right; width:150px; height:50px; background:url("../images/button-right.png") no-repeat; text-align:left; padding-left:16px; margin-right:25px; }
+footer button.buttonprevious.enabled:hover { background:url("../images/button-right-hover.png"); color:#fff; text-shadow:none; }
 
-	a:link 		{ text-decoration:none; }
-	a:visited 	{ text-decoration:none; }
-	a:hover 	{ text-decoration:none; }
-	a:active 	{ text-decoration:none; }
-	
-	footer .left 	{width:300px;float:left;padding:6px 0 0 19px;}
-	footer .right 	{width:600px;float:right;text-align:right; padding:6px 24px 0 0;}
-	footer p 		{color:#999; }
+a:link 		{ text-decoration:none; }
+a:visited 	{ text-decoration:none; }
+a:hover 	{ text-decoration:none; }
+a:active 	{ text-decoration:none; }
 
-	#tweet	{ position:absolute; left:50%; margin-left:-225px; margin-right: 200px; max-width:492px; padding:23px 0px 0px 88px; overflow: hidden; }
-	#contentarea #tweet { position:relative; }
-	footer #tweet { padding-top:48px; margin-left:-233px;}
-	#tweet img.profile { position:absolute; left:0px; top:71px; }
-	#tweet p { margin:0; padding:0; text-shadow:0px 1px 0px #fff; }
-	#tweet .name .twitter-anywhere-user { color:#000; font-size:12px; margin-bottom:6px; }
-	#tweet .text { color:#666; font-size:18px; line-height:22px; }
-	#tweet .urls { margin-bottom:7px; font-size:18px; }
-	#tweet .meta { font-size:10px; margin-bottom:10px; line-height: 15px; }
-	#tweet .url	{ color:#b0b0b0; }
-	#tweet .hashtag	{ color:#00af97; }
-	#tweet .text .twitter-anywhere-user { color:#00af97; }
-        
-	#tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; max-width:692px; }
-	#tweet.big p.text { font-size:36px; line-height:38px; }
-	#tweet.big p.urls { margin-bottom:7px; font-size:36px; }
-        #tweet.big img.profile { top: 45px; }
+footer .left 	{width:300px;float:left;padding:6px 0 0 19px;}
+footer .right 	{width:600px;float:right;text-align:right; padding:6px 24px 0 0;}
+footer p 		{color:#999; }
 
-        #tweet i.bird { background-image: url("../images/bird_16_gray.png"); }
-        #tweet .actions { display: none; }
-        #tweet i.bird,
-        #tweet .actions a span i { text-indent: -99999px; outline: none; background-color: transparent; background-repeat: no-repeat; width: 15px; height: 15px; margin: 0 2px -3px 0; display: inline-block; }
-        #tweet .actions a span i { margin-left: 8px }
-        #tweet .actions a:hover span i { background-position: -16px 0px }
-        #tweet.favorited .actions a.favorite span i,
-        #tweet.favorited .actions a.favorite:hover span i,
-        #tweet.retweeted .actions a.retweet span i,
-        #tweet.retweeted .actions a.retweet:hover span i { background-position: -32px 0px }
-        #tweet .actions .favorite span i { background-image: url("../images/favorite-sprite.png"); }
-        #tweet .actions .retweet span i { background-image: url("../images/retweet-sprite.png"); }
-        #tweet .actions .reply span i { background-image: url("../images/reply-sprite.png"); }
+#tweet	{ position:absolute; left:50%; margin-left:-225px; margin-right: 200px; max-width:492px; padding:23px 0px 0px 88px; overflow: hidden; }
+#contentarea #tweet { position:relative; }
+footer #tweet { padding-top:48px; margin-left:-233px;}
+#tweet img.profile { position:absolute; left:0px; top:71px; }
+#tweet p { margin:0; padding:0; text-shadow:0px 1px 0px #fff; }
+#tweet .name .twitter-anywhere-user { color:#000; font-size:12px; margin-bottom:6px; }
+#tweet .text { color:#666; font-size:18px; line-height:22px; }
+#tweet .urls { margin-bottom:7px; font-size:18px; }
+#tweet .meta { font-size:10px; margin-bottom:10px; line-height: 15px; }
+#tweet .url	{ color:#b0b0b0; }
+#tweet .hashtag	{ color:#00af97; }
+#tweet .text .twitter-anywhere-user { color:#00af97; }
+
+#tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; max-width:692px; }
+#tweet.big p.text { font-size:36px; line-height:38px; }
+#tweet.big p.urls { margin-bottom:7px; font-size:36px; }
+#tweet.big img.profile { top: 45px; }
+
+#tweet i.bird { background-image: url("../images/bird_16_gray.png"); }
+#tweet .actions { display: none; }
+#tweet i.bird,
+#tweet .actions a span i { text-indent: -99999px; outline: none; background-color: transparent; background-repeat: no-repeat; width: 15px; height: 15px; margin: 0 2px -3px 0; display: inline-block; }
+#tweet .actions a span i { margin-left: 8px }
+#tweet .actions a:hover span i { background-position: -16px 0px }
+#tweet.favorited .actions a.favorite span i,
+#tweet.favorited .actions a.favorite:hover span i,
+#tweet.retweeted .actions a.retweet span i,
+#tweet.retweeted .actions a.retweet:hover span i { background-position: -32px 0px }
+#tweet .actions .favorite span i { background-image: url("../images/favorite-sprite.png"); }
+#tweet .actions .retweet span i { background-image: url("../images/retweet-sprite.png"); }
+#tweet .actions .reply span i { background-image: url("../images/reply-sprite.png"); }
 
 /* *********
-	MENU
+        MENU
 ********** */
 /* remove all list stylings */
 nav#menu  	{
-position:absolute;
-right:0px;
-height:24px;
-top:-24px;
-z-index:100;
+    position:absolute;
+    right:0px;
+    height:24px;
+    top:-24px;
+    z-index:100;
 }
 .menu, .menu ul {
-	margin:0px 0 0 0;
-	padding:0;
-	border:0;
-	list-style-type: none;
-	display:block;
+    margin:0px 0 0 0;
+    padding:0;
+    border:0;
+    list-style-type: none;
+    display:block;
 }
 
 .menu li {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	display: block;
-	float: left;
-	position: relative;	/* position each LI, thus creating potential IE.win overlap problem */
-	z-index:50;		/* thus we need to apply explicit z-index here... */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: block;
+    float: left;
+    position: relative;	/* position each LI, thus creating potential IE.win overlap problem */
+    z-index:50;		/* thus we need to apply explicit z-index here... */
 }
 
 .menu li:hover {
-	z-index: 10000;	/* ...and here. this makes sure active item is always above anything else in the menu */
-	white-space: normal;/* required to resolve IE7 :hover bug (z-index above is ignored if this is not present)
-							see http://www.tanfa.co.uk/css/articles/pure-css-popups-bug.asp for other stuff that work */
+    z-index: 10000;	/* ...and here. this makes sure active item is always above anything else in the menu */
+    white-space: normal;/* required to resolve IE7 :hover bug (z-index above is ignored if this is not present)
+                                                    see http://www.tanfa.co.uk/css/articles/pure-css-popups-bug.asp for other stuff that work */
 }
 
 .menu li li {
-float: none;
+    float: none;
 }
 
 .menu ul {
-visibility: hidden;
-position: absolute;
-z-index: 10;
-left: 0;
-top: 0;
+    visibility: hidden;
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    top: 0;
 }
 
 .menu li:hover>ul {
-	visibility: visible;	/* display submenu them on hover */
-	top: 100%;	/* 1st level go below their parent item */
+    visibility: visible;	/* display submenu them on hover */
+    top: 100%;	/* 1st level go below their parent item */
 }
 
 .menu li li:hover>ul {	/* 2nd+ levels go on the right side of the parent item */
-	top: 0;
-	left: 100%;
+    top: 0;
+    left: 100%;
 }
 
 /* -- float.clear --
-	force containment of floated LIs inside of UL */
+        force containment of floated LIs inside of UL */
 .menu:after, .menu ul:after {
-	content: ".";
-	height: 0;
-	display: block;
-	visibility: hidden;
-	overflow: hidden;
-	clear: both;
+    content: ".";
+    height: 0;
+    display: block;
+    visibility: hidden;
+    overflow: hidden;
+    clear: both;
 }
 .menu, .menu ul {	/* IE7 float clear: */
-	min-height: 0;
+    min-height: 0;
 }
 /* -- float.clear.END --  */
 
 /* -- sticky.submenu --
-	it should not disappear when your mouse moves a bit outside the submenu
-	YOU SHOULD NOT STYLE the background of the ".menu UL" or this feature may not work properly!
-	if you do it, make sure you 110% know what you do */
+        it should not disappear when your mouse moves a bit outside the submenu
+        YOU SHOULD NOT STYLE the background of the ".menu UL" or this feature may not work properly!
+        if you do it, make sure you 110% know what you do */
 .menu ul {
-	background-image: url("../images/blank.png");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
-	padding: 0px 0px 30px 30px;
-	margin: 0px 0 0 -30px;
-	/*background: #f00;	*//* uncomment this if you want to see the "safe" area.
-								you can also use to adjust the safe area to your requirement */
+    background-image: url("../images/blank.png");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
+    padding: 0px 0px 30px 30px;
+    margin: 0px 0 0 -30px;
+    /*background: #f00;	*//* uncomment this if you want to see the "safe" area.
+                                                            you can also use to adjust the safe area to your requirement */
 }
 .menu ul ul {
-	padding: 30px 30px 30px 10px;
-	margin: -30px 0 0 -10px;
+    padding: 30px 30px 30px 10px;
+    margin: -30px 0 0 -10px;
 }
 /* -- sticky.submenu.END -- */
 
@@ -320,87 +320,87 @@ top: 0;
 .menu ul 	{ text-align:left; }
 
 .menu a, .menu a:link, .menu a:visited, .menu a:hover, .menu a:active  {
-	white-space:nowrap;
-	display:block;
-	position:relative;
-	text-decoration:none;
-	text-align:left;
-	color:#666;
-	font-weight:200;
-	font-size:10px;
-	outline:none;
-	line-height:22px;
-	padding-top:0px;
-	padding-bottom:0px;
-	padding-left:10px;
-	padding-right:10px;
-	margin:0px;
+    white-space:nowrap;
+    display:block;
+    position:relative;
+    text-decoration:none;
+    text-align:left;
+    color:#666;
+    font-weight:200;
+    font-size:10px;
+    outline:none;
+    line-height:22px;
+    padding-top:0px;
+    padding-bottom:0px;
+    padding-left:10px;
+    padding-right:10px;
+    margin:0px;
 }
 
 .menu a:hover, .menu li:hover>a {
-	color:#666;
-	cursor:pointer;
-	text-decoration:none;
+    color:#666;
+    cursor:pointer;
+    text-decoration:none;
 }
 
 .menu a:hover { color: #000;text-decoration:none; }
 
 .menu li li {	/* create borders around each item */
-	border-top:0px;
-	left:-1px;
-	min-width:156px;
-	background-color:#fff;
+    border-top:0px;
+    left:-1px;
+    min-width:156px;
+    background-color:#fff;
 }
 .menu li li a, .menu li li a:link, .menu li li a:visited, .menu li li a:hover, .menu li li a:active  {
-	text-decoration: none;
-	color:#909090;
-	padding:0px 10px;
-	font-size:10px;
-	line-height:18px;
-	letter-spacing:0;
-	border-left:1px solid #909090;
-	border-right:1px solid #909090;
-	background-color:#fff;
+    text-decoration: none;
+    color:#909090;
+    padding:0px 10px;
+    font-size:10px;
+    line-height:18px;
+    letter-spacing:0;
+    border-left:1px solid #909090;
+    border-right:1px solid #909090;
+    background-color:#fff;
 }
 .menu li li a:hover {
-	color:#000;
-	background-color:#e4ffec;
+    color:#000;
+    background-color:#e4ffec;
 }
 
 .menu ul>li + li {	/* and remove the top border on all but first item in the list */
-	border-top:0px;
+    border-top:0px;
 }
 
 .menu li li:hover>ul {	/* inset 2nd+ submenus, to show off overlapping */
-	top:5px;
-	left:90%;
+    top:5px;
+    left:90%;
 }
 .menu .toplevel {
-	height:24px;
-	text-align:center;
-	border-left:1px solid #e8e8e8;
-	border-right:1px solid #fff;
-	display:table-cell;
-	vertical-align:middle;
+    height:24px;
+    text-align:center;
+    border-left:1px solid #e8e8e8;
+    border-right:1px solid #fff;
+    display:table-cell;
+    vertical-align:middle;
 }
 
 .menu .item3>a:first-child, .menu .item4>a:first-child, .menu .item5>a:first-child {
 }
 .menu .item1 a, .menu .item1 a:link, .menu .item1 a:visited, .menu .item1 a:hover, .menu .item1 a:active  {
-border-left:0px;
+    border-left:0px;
 }
 
 .menu .item1 { width:250px; border:0px; }
 .menu .item1 a { text-align:right; }
 .menu .item2 { width:60px; }
-	.menu li.item2 li:last-child { border-bottom:1px solid #909090; z-index:100; }
-	.menu .item2:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+.menu li.item2 li:last-child { border-bottom:1px solid #909090; z-index:100; }
+.menu .item2:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
 .menu .item3 { width:55px; background-color:#fff; }
-	.menu .item3:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+.menu .item3:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
 .menu .item4 { width:105px; }
-	.menu .item4:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
-	.menu li.item4 li { margin-left:-49px; }
-	.menu li.item4 li:last-child { border-bottom:1px solid #909090;}
+.menu .item4:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+.menu li.item4 li { margin-left:-49px; }
+.menu li.item4 li:last-child { border-bottom:1px solid #909090;}
 
 .menu .item2, .menu .item4 { background:url("../images/icon-arrow-down.png") right 10px no-repeat #fff; }
 
@@ -414,7 +414,7 @@ border-left:0px;
 
 /* Fix for IE5/Mac \*//*/
 .menu a {
-	float: left;
+        float: left;
 }
 /* End Fix */
 
@@ -443,21 +443,21 @@ border-left:0px;
 
 @media screen and (max-device-width: 480px) {
 
-  /* html { -webkit-text-size-adjust:none; -ms-text-size-adjust:none; } */
+    /* html { -webkit-text-size-adjust:none; -ms-text-size-adjust:none; } */
 }
 
 
 @media print {
-  * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important;
-  -ms-filter: none !important; } 
-  a, a:visited { color: #444 !important; text-decoration: underline; }
-  a[href]:after { content: " (" attr(href) ")"; }
-  abbr[title]:after { content: " (" attr(title) ")"; }
-  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  
-  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
-  thead { display: table-header-group; }
-  tr, img { page-break-inside: avoid; }
-  @page { margin: 0.5cm; }
-  p, h2, h3 { orphans: 3; widows: 3; }
-  h2, h3{ page-break-after: avoid; }
+    * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important;
+        -ms-filter: none !important; } 
+    a, a:visited { color: #444 !important; text-decoration: underline; }
+    a[href]:after { content: " (" attr(href) ")"; }
+    abbr[title]:after { content: " (" attr(title) ")"; }
+    .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  
+    pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+    thead { display: table-header-group; }
+    tr, img { page-break-inside: avoid; }
+    @page { margin: 0.5cm; }
+    p, h2, h3 { orphans: 3; widows: 3; }
+    h2, h3{ page-break-after: avoid; }
 }
