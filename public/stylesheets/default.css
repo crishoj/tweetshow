@@ -189,7 +189,7 @@ clear:both;
 	footer .right 	{width:600px;float:right;text-align:right; padding:6px 24px 0 0;}
 	footer p 		{color:#999; }
 
-	#tweet	{ position:absolute; left:50%; margin-left:-225px; width:492px; padding:23px 0px 0px 88px; }
+	#tweet	{ position:absolute; left:50%; margin-left:-225px; margin-right: 200px; max-width:492px; padding:23px 0px 0px 88px; overflow: hidden; }
 	#contentarea #tweet { position:relative; }
 	footer #tweet { padding-top:48px; margin-left:-233px;}
 	#tweet img.profile { position:absolute; left:0px; top:71px; }
@@ -202,7 +202,7 @@ clear:both;
 	#tweet .hashtag	{ color:#00af97; }
 	#tweet .text .twitter-anywhere-user { color:#00af97; }
         
-	#tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; width:692px; }
+	#tweet.big	{ position:absolute; top:50%; margin-top: -100px; left:50%; margin-left:-300px; max-width:692px; }
 	#tweet.big p.text { font-size:36px; line-height:38px; }
 	#tweet.big p.urls { margin-bottom:7px; font-size:36px; }
         #tweet.big img.profile { top: 45px; }
