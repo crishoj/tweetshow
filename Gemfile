@@ -9,6 +9,7 @@ gem 'rails', '3.1.0.rc5'
   gem 'coffee-rails', "~> 3.1.0.rc"
   gem 'uglifier'
   gem 'yui-compressor', :require => 'yui/compressor'
+  gem 'execjs'
 #end
 
 # Use unicorn as the web server
@@ -17,6 +18,7 @@ gem 'rails', '3.1.0.rc5'
 # Deploy with Capistrano
 gem 'capistrano'
 gem 'capistrano-ext'
+
 
 # To use debugger
 gem 'ruby-debug19', :require => 'ruby-debug'

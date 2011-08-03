@@ -148,6 +148,7 @@ DEPENDENCIES
   capistrano
   capistrano-ext
   coffee-rails (~> 3.1.0.rc)
+  execjs
   rails (= 3.1.0.rc5)
   ruby-debug19
   sass-rails (~> 3.1.0.rc)
