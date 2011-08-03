@@ -22,8 +22,10 @@ gem 'capistrano-ext'
 gem 'rvm'
 gem 'therubyracer'
 
-# To use debugger
-gem 'ruby-debug19', :require => 'ruby-debug'
+group :development do
+  # To use debugger
+  gem 'ruby-debug19', :require => 'ruby-debug'
+end
 
 gem 'sqlite3'
 #gem 'activerecord-jdbcsqlite3-adapter'
