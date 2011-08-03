@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>tweetshow.nu</title>
+  <meta name="description" content="Flip through your tweets as a slideshow">
+  <meta name="keywords" content="twitter slideshow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "application" %>
+  <script src="http://platform.twitter.com/widgets.js"></script>
+  <script src="http://platform.twitter.com/anywhere.js?id=ll2W2dyJpCHr4bhbZ9IwlQ&v=1.2.0" type="text/javascript"></script>
+  <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-23031830-2']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+          var ga = document.createElement('script');
+          ga.type = 'text/javascript';
+          ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(ga, s);
+      })();
+  </script>
+</head>
+<body>
+<header></header>
+<%= yield %>
+</body>
+</html>

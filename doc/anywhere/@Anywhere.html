@@ -1,0 +1,706 @@
+<html>
+	<head>
+	<title>@Anywhere documentation</title>
+	<link rel="stylesheet" href="sheet.css" media="screen" type="text/css">
+	<style type="text/css">
+	body {
+	 background: #12212d url(http://media.twitter.com/wp-content/themes/sandbox/img/bg.png) 0 0 no-repeat fixed;
+	}
+	#doc {
+	  width: 1260px;
+  	margin: 0 auto;
+	}
+	 tr.active.error,
+	 tr.error {
+      background: #ffe3e3;
+    }
+    .imp {
+      color: #cb0f0f;;
+    }
+    #top h2 {
+      width: auto;
+    }
+    #top {
+      width: 1240px;
+    }
+    #top table {
+      width: 100%;
+    }
+    pre {
+      font-size: 14px;
+      color: #333;
+      font-family: 'courier new', courier, monospace;
+    }
+    .column tr:hover td {
+      background-color: #ffffeb;
+    }
+    .header a {
+      color: #fff;
+      text-decoration: none;
+    }
+    div.column {
+      margin: 0 10px 10px 0;
+    }
+	</style>
+</head>
+<body>
+  <div id="doc">
+    <div class="header">
+      <h1><strong><a href="http://twitter.com/anywhere">@Anywhere</a></strong> JavaScript API</h1>
+    </div>
+    <div class="doc">
+      <div class="column">
+        <h2>User</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Class Methods</th>
+          </tr>
+          <tr>
+            <td><strong>find(identifer)</strong> <span>&rarr;</span> User</td>
+            <td class="desc">id or screen_name</td>
+          </tr>
+          <tr>
+            <td><strong>findAll(identifiers)</strong> <span>&rarr;</span> [Users]</td>
+            <td class="desc">ids and/or screen_names</td>
+          </tr>
+          <tr>
+            <td><strong>current</strong> <span>&rarr;</span> User</td>
+            <td class="desc">the currently logged in user</td>
+          </tr>
+          <tr>
+            <td><strong>search(query)</strong> <span>&rarr;</span> [Users]</td>
+            <td class="desc">search for a user</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">
+              id, name, screenName, location, description, profileImageUrl, url, protected,
+              followersCount, profileBackgroundColor, profileTextColor, profileLinkColor,
+              profileSidebarFillColor, profileSidebarBorderColor, friendsCount, createdAt, favoritesCount, utcOffset, timeZone,
+              profileBackgroundImageUrl, profileBackgroundTile, statusesCount, notifications, following, verified
+            </td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td><strong>status</strong><span>&rarr;</span> Status</td>
+            <td class="desc">the user's latest status</td>
+          </tr>
+        </table>
+
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong>favorites</strong> <span>&rarr;</span> [Statuses]</td>
+            <td class="desc">the user's favorited statuses</td>
+          </tr>
+          <tr>
+            <td><strong>userTimeline</strong> <span>&rarr;</span> [Statuses]</td>
+            <td class="desc">the user's user timeline (profile page on twitter.com)</td>
+          </tr>
+          <tr>
+            <td><strong>followers</strong> <span>&rarr;</span> [Users]</td>
+            <td class="desc">users that follow this user</td>
+          </tr>
+          <tr>
+            <td><strong>friends</strong> <span>&rarr;</span> [Users]</td>
+            <td class="desc">the users that this user follows</td>
+          </tr>
+          <tr>
+            <td><strong>isFollowing</strong> <span>&rarr;</span> true | false</td>
+            <td class="desc">is the logged in user following this user?</td>
+          </tr>
+          <tr>
+            <td><strong>isFriend</strong> <span>&rarr;</span> true | false</td>
+            <td class="desc">alias to User#isFollowing</td>
+          </tr>
+          <tr>
+            <td><strong>isFollowedBy</strong> <span>&rarr;</span> true | false</td>
+            <td class="desc">does this user follow the logged in user?</td>
+          </tr>
+          <tr>
+            <td><strong>isMutual</strong> <span>&rarr;</span> true | false</td>
+            <td class="desc">does the logged in user follow this user and vice-versa?</td>
+          </tr>
+          <tr>
+            <td><strong>block</strong> <span>&rarr;</span> User,</td>
+            <td class="desc">block this user for the logged in user</td>
+          </tr>
+          <tr>
+            <td><strong>unblock</strong> <span>&rarr;</span> User,</td>
+            <td class="desc">unblock this user for the logged in user</td>
+          </tr>
+          <tr>
+            <td><strong>directMessage(message)</strong> <span>&rarr;</span> DirectMessage</td>
+            <td class="desc">send a direct message to this user from the logged in user</td>
+          </tr>
+          <tr>
+            <td><strong>dm(message)</strong> <span>&rarr;</span> DirectMessage</td>
+            <td class="desc">alias to User#directMessage</td>
+          </tr>
+          <tr>
+            <td><strong>follow</strong> <span>&rarr;</span> User</td>
+            <td class="desc">as the logged in user, follow this user</td>
+          </tr>
+          <tr>
+            <td><strong>unfollow</strong> <span>&rarr;</span> User</td>
+            <td class="desc">as the logged in user, unfollow this user</td>
+          </tr>
+          <tr>
+            <td><strong>report</strong> <span>&rarr;</span> User</td>
+            <td class="desc">as the logged in user, report this user for spam</td>
+          </tr>
+          <tr>
+            <td><strong>notifications<br/>(true|false|"on"|"off")</strong> <span>&rarr;</span> User</td>
+            <td class="desc">as the logged in user, receive device updates when this user tweets(requires phone setup)</td>
+          </tr>
+          <tr>
+            <td><strong>lists</strong> <span>&rarr;</span> [Lists]</td>
+            <td class="desc"> lists this user has created</td>
+          </tr>
+          <tr>
+            <td><strong>memberships</strong> <span>&rarr;</span> [Lists]</td>
+            <td class="desc">lists that follow this user</td>
+          </tr>
+          <tr>
+            <td><strong>subscriptions</strong> <span>&rarr;</span> [Lists]</td>
+            <td class="desc">lists that this user follows</td>
+          </tr>
+          <tr>
+            <td><strong>isVerified</strong> <span>&rarr;</span> true | false</td>
+            <td class="desc">is this user verified? (getter for 'verified' instance property)</td>
+          </tr>
+        </table>
+        <h2>List</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Class Methods</th>
+          </tr>
+          <tr>
+            <td>None.</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">id, name, fullName, description, subscriberCount, memberCount, slug, uri, mode</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td><strong>user </strong> <span>&rarr;</span> User </td>
+          <td class="desc"> the user that created this list</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong> subscribe </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> as logged in user, subscribe to this list</td>
+          </tr>
+          <tr>
+            <td><strong>follow </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> alias to List#follow</td>
+          </tr>
+          <tr>
+            <td><strong> unsubscribe </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> as logged in user, unsubscribe to this list</td>
+          </tr>
+          <tr>
+            <td><strong> unfollow </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> alias to List#unfollow</td>
+          </tr>
+          <tr>
+            <td><strong>add(user|id|screenName) </strong> <span>&rarr;</span> List</td>
+            <td class="desc"> add a user to this list (logged in user must own)</td>
+          </tr>
+          <tr>
+            <td><strong> remove(user|id|screenName) </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> remove a user from this list (logged in user must own)</td>
+          </tr>
+          <tr>
+            <td><strong> owner</strong> <span>&rarr;</span> User </td>
+            <td class="desc"> get the user that owns this list</td>
+          </tr>
+          <tr>
+            <td><strong>isMember<br/>(user|id|screenName) </strong> <span>&rarr;</span> true|false </td>
+            <td class="desc"> is the user a member of this list?</td>
+          </tr>
+          <tr>
+            <td><strong> isSubscriber<br/>(user|id|screenName) </strong> <span>&rarr;</span> true|false </td>
+            <td class="desc">does the user subscribe to this list?</td>
+          </tr>
+          <tr>
+            <td><strong> destroy </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> destroy this list, if owned by the logged in user</td>
+          </tr>
+          <tr>
+            <td><strong> update(options) </strong> <span>&rarr;</span> List </td>
+            <td class="desc"> update this list, see dev.twitter.com for options (logged in user must own this list)</td>
+          </tr>
+          <tr>
+            <td><strong>statuses </strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc"> get a list of statuses this list tracks</td>
+          </tr>
+          <tr>
+            <td><strong> subscribers </strong> <span>&rarr;</span> [Users] </td>
+            <td class="desc"> list of users that subscribe to this list</td>
+          </tr>
+          <tr>
+            <td><strong> followers </strong> <span>&rarr;</span> [Users] </td><td class="desc"> alias to List#subscribers</td>
+          </tr>
+          <tr>
+            <td><strong> members </strong> <span>&rarr;</span> [Users] </td>
+            <td class="desc"> list of users that this list follows</td>
+          </tr>
+          <tr>
+            <td><strong> following </strong> <span>&rarr;</span> [Users] </td>
+            <td class="desc"> alias to List#members</td>
+          </tr>
+        </table>
+      </div>
+      <div class="column">
+        <h2>Current User <em>(subclasses User)</em></h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong>directMessages</strong> <span>&rarr;</span> [DirectMessages]</td>
+            <td class="desc">direct messages sent _to_ the current user</td>
+          </tr>
+          <tr>
+            <td><strong>dms</strong> <span>&rarr;</span> [DirectMessages]</td>
+            <td class="desc">alias for CurrentUser#directMessages</td>
+          </tr>
+          <tr>
+            <td><strong>receivedMessages</strong> <span>&rarr;</span> [DirectMessages]</td>
+            <td class="desc">alias for CurrentUser#directMessages</td>
+          </tr>
+          <tr>
+            <td><strong>sentMessages</strong> <span>&rarr;</span> [DirectMessages]</td>
+            <td class="desc">direct messages sent _by_ the current user</td>
+          </tr>
+          <tr>
+            <td><strong>homeTimeline</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">the current user's home timeline statuses (as seen on twitter.com logged in homepage)</td>
+          </tr>
+          <tr>
+            <td><strong>mentions</strong> <span>&rarr;</span> [Statuses]</td>
+            <td class="desc">statuses that mention the current user (as seen on the twitter.com replies tab)</td>
+          </tr>
+          <tr>
+            <td><strong>retweeting</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">statuses the current user has retweeted</td>
+          </tr>
+          <tr>
+            <td><strong>retweets</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">statuses retweeted by the current user's friends (i.e. what appears in their home timeline)</td>
+          </tr>
+          <tr>
+            <td><strong>retweeted</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">statuses the current user has posted that have been retweeted by others</td>
+          </tr>
+          <tr>
+            <td><strong>blocks</strong> <span>&rarr;</span> [Users] </td>
+            <td class="desc">a list of users that the current user blocks</td>
+          </tr>
+          <tr>
+            <td><strong>isBlocking<br/>(user|id|screenName)</strong> <span>&rarr;</span><br/>true | false </td>
+            <td class="desc">is the current user blocking some other user?</td>
+          </tr>
+          <tr>
+            <td><strong>update</strong> <span>&rarr;</span> [User] </td>
+            <td class="desc">not yet working method to update current user's account info</td>
+          </tr>
+          <tr>
+            <td><strong>savedSearches</strong> <span>&rarr;</span> [SavedSearches]</td>
+            <td class="desc">a list of the current user's saved searches</td>
+          </tr>
+          <tr>
+            <td><strong>searches</strong> <span>&rarr;</span> [SavedSearches] </td>
+            <td class="desc">alias for CurrentUser#savedSearches</td>
+          </tr>
+          <tr>
+            <td><strong>logout</strong> <span>&rarr;</span> true </td>
+            <td class="desc">end oauth2 session for the current user</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Collection Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong>savedSearches.create</strong> <span>&rarr;</span> SavedSearch </td>
+            <td class="desc">create a new saved search for the logged in user</td>
+          </tr>
+          <tr>
+            <td><strong>savedSearches.find</strong> <span>&rarr;</span> SavedSearch </td>
+            <td class="desc">find one of the logged in user's saved searches</td>
+          </tr>
+          <tr>
+            <td><strong>lists.create</strong> <span>&rarr;</span> List </td>
+            <td class="desc">create a new list for the logged in user</td>
+          </tr>
+          <tr>
+            <td><strong>lists.find</strong> <span>&rarr;</span> List </td>
+            <td class="desc">find one of the logged in user's lists</td>
+          </tr>
+        </table>
+
+        <h2>DirectMessage</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Class Methods</th>
+          </tr>
+          <tr>
+            <td><strong>send(user|id|sn, message) </strong><span>&rarr;</span> DirectMessage </td>
+            <td class="desc"> send a direct message to a particular user</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">id, senderId, recipientId, text, createdAt, senderScreenName, recipientScreenName</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td><strong>sender </strong><span>&rarr;</span> User </td>
+            <td class="desc"> the user that send this direct message</td>
+          </tr>
+          <tr>
+            <td><strong>recipient </strong> <span>&rarr;</span> User </td>
+            <td class="desc"> the user that received this direct message</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong>destroy </strong> <span>&rarr;</span> DirectMessage </td>
+            <td class="desc"> destroy this direct message (must be logged in as sender or receiver)</td>
+          </tr>
+        </table>
+
+        <h2>Place</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Class Methods</th>
+          </tr>
+          <tr>
+            <td><strong>find(id) </strong><span>&rarr;</span> Place </td>
+            <td class="desc"> retrieve a place by id </td>
+          </tr>
+          <tr>
+            <td><strong>nearby(options) </strong><span>&rarr;</span> [Places] </td>
+            <td class="desc"> find places nearby to a lat,long pair, see dev.twitter.com for a full list of options</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">id, name, countryCode, placeType, url, fullName, boundingBox{type, coordinates}</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td><strong>containedWithin</strong> <span>&rarr;</span> Place </td>
+            <td class="desc"> get the place that contains this place, if one does</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Methods</th>
+          </tr>
+          <tr>
+            <td class="desc">None.</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="column">
+
+        <h2>Status</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Class Methods</th>
+          </tr>
+          <tr>
+            <td><strong>find(id)</strong><span>&rarr;</span> Status </td>
+            <td class="desc">find Status by ID</td>
+          </tr>
+          <tr>
+            <td><strong>update(status, options)</strong><span>&rarr;</span> Status </td>
+            <td class="desc">update status (i.e. Tweet), full options list found on dev.twitter.com</td>
+          </tr>
+          <tr>
+            <td><strong>publicTimeline</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">get a list of statuses in the public timeline</td>
+          </tr>
+          <tr>
+            <td><strong> search(query)</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">search for statuses (i.e. search.twitter.com)</td>
+          </tr>
+          <tr>
+            <td><strong> retweet(status|id)</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, retweet a status</td>
+          </tr>
+          <tr>
+            <td><strong> favorite(status|id)</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, favorite a status</td>
+          </tr>
+          <tr>
+            <td><strong> unfavorite(status|id)</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, unfavorite a status</td>
+          </tr>
+          <tr>
+            <td><strong> reply(message, status|id)</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, reply to a status</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">id, createdAt, text, source, truncated, inReplyToStatusId, inReplyToUserId, favorited, inReplyToScreenName, geo</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td><strong>user</strong><span>&rarr;</span> User </td>
+            <td class="desc">The user that authored this status</td>
+          </tr>
+          <tr>
+            <td><strong> place</strong><span>&rarr;</span> Place </td>
+            <td class="desc">The place a status was updated if geolocation was used</td>
+          </tr>
+          <tr>
+            <td><strong>retweetedStatus</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">If this is a retweet, the original status that was retweeted</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong>retweet</strong><span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, retweet this status</td>
+          </tr>
+          <tr>
+            <td><strong> favorite</strong><span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, favorite this status</td>
+          </tr>
+          <tr>
+            <td><strong> unfavorite</strong><span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, unfavorite this status</td>
+          </tr>
+          <tr>
+            <td><strong>reply(status)</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, reply to this status (i.e. Tweet w/ reply_id set)</td>
+          </tr>
+          <tr>
+            <td><strong>destroy</strong> <span>&rarr;</span> Status </td>
+            <td class="desc">as logged in user, destroy status (logged in user must own status)</td>
+          </tr>
+          <tr>
+            <td><strong> retweets</strong> <span>&rarr;</span> [Statuses] </td>
+            <td class="desc">a list of statuses that retweet this status</td>
+          </tr>
+          <tr>
+            <td><strong> retweeters</strong> <span>&rarr;</span> [Users] </td>
+            <td class="desc">a list of users that retweeted this status</td>
+          </tr>
+          <tr>
+            <td><strong> contributors</strong> <span>&rarr;</span> [Users], </td>
+            <td class="desc">if multi-author account, a list of contributors on this status</td>
+          </tr>
+          <tr>
+            <td><strong> inReplyTo</strong><span>&rarr;</span> User </td>
+            <td class="desc">if reply, get the user this status is in reply to</td>
+          </tr>
+        </table>
+
+        <h2>SearchResult</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Class Methods</th>
+          </tr>
+          <tr>
+            <td class="desc">None.</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">id, text, toUserId, toUser, fromUser, metadata{result_type, recent_retweets},
+              fromUserId, isoLanguageCode, source, profileImageUrl, createdAt
+            </td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">None.</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong> retweet </strong><span>&rarr;</span> Status </td>
+            <td class="desc"> as the logged in user, retweet this search result</td>
+          </tr>
+          <tr>
+            <td><strong>favorite</strong> <span>&rarr;</span> Status </td>
+            <td class="desc"> as the logged in user, favorite this search result</td>
+          </tr>
+          <tr>
+            <td><strong>unfavorite </strong> <span>&rarr;</span> Status </td>
+            <td class="desc"> as the logged in user, unfavorite this search result</td>
+          </tr>
+          <tr>
+            <td><strong>reply(status) </strong> <span>&rarr;</span> Status </td>
+            <td class="desc"> as the logged in user, reply to this search result</td>
+          </tr>
+        </table>
+
+        <h2>SavedSearch</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Class Methods</th>
+          </tr>
+          <tr>
+            <td class="desc">None.</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">id, name, query, position, createdAt</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th>Special Instance Properties</th>
+          </tr>
+          <tr>
+            <td class="desc">None.</td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <th colspan="2">Instance Methods</th>
+          </tr>
+          <tr>
+            <td><strong>destroy </strong><span>&rarr;</span> SavedSearch </td>
+            <td class="desc"> destroy the saved search (if saved by the logged in user)</td>
+          </tr>
+          <tr>
+            <td><strong>results </strong> <span>&rarr;</span> [SearchResults] </td>
+            <td class="desc"> retrieve search results for this search</td>
+          </tr>
+        </table>
+
+      </div>
+      <br style="clear:both"/>
+
+
+      <div id="top">
+        <h2>Asset Host Configuration</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+    <pre>
+    // note that this is a preview release - do not release production integrations with this
+    &lt;script src="http://platform.twitter.com/anywhere.js?id=API_KEY&v=<span class="imp">chirp_preview</span>"&gt;&lt;/script&gt;
+    &lt;script&gt;
+    twttr.anywhere.config({
+      <span class="imp">assetHost: 'twitter-any.s3.amazonaws.com'</span>
+    });
+    twttr.anywhere(function(T) {
+      if (T.isConnected()) {
+        // your app!
+
+      } else {
+        T('#login').connectButton();
+      }
+    });
+    &lt;/script&gt;
+    </pre>
+
+            </td>
+          </tr>
+        </table>
+        <h2>Facade method examples</h2>
+        <table>
+          <tr>
+            <td>
+  <pre>
+    &lt;script src="jquery.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+    twttr.anywhere(function(T) {
+
+      // get @ded's first 20 statuses, filter only the tweets that mention photography, and render each into an HTML element
+      T.User.find('ded').timeline().first(20).filter(filterer).each(function(status) {
+        $('div#tweets').append('&lt;p&gt;' + status.screenName + ': ' + status.text + '&lt;/p&gt;');
+      });
+
+      function filterer(status) {
+        return status.text.match(/photography/);
+      }
+
+    });
+    &lt;/script&gt;
+  </pre>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="footer">
+        <p>&copy; Twitter, Inc.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+
+
+
+
+
+/*
+     FILE ARCHIVED ON 12:59:45 Oct 22, 2010 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 19:44:28 Apr 28, 2011.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+*{
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+html {
+	background: #C7E0EC url(http://replay.web.archive.org/20101022125945/https://s3.amazonaws.com/twitter_production/images/oauth2/background.jpg) repeat-x;
+}
+
+body {
+	font: 12px Arial, sans-serif;
+	border-top: 4px solid rgba(32,108,157,0.6);
+}
+
+div.header, div.footer {
+	width: 100%;
+	clear: both;
+	display: block;
+	margin: 16px 0 4px 0;
+}
+
+div.header h1, div.footer p {
+	margin: 0;
+	padding:10px 36px 0px 36px;
+	color: #206C9D;
+	color: #eee;
+	font-family: Helvetica Neue, Helvetica, sans-serif;
+	font-size: 20px;
+	font-weight: 300;
+	text-shadow: 0 -1px 0 rgba(32,108,157,0.2);
+}
+
+div.header h1 strong {
+	font-weight: bold;
+	color: #fff;
+}
+
+div.footer p {
+	font: 11px Arial, sans-serif;
+	color: #999;
+	padding-bottom: 30px;
+	text-shadow: none;
+}
+
+div.column {
+	float: left;
+	width: 400px;
+	margin: 0px 0 10px 20px;
+}
+
+h2 {
+	color: #fff;
+	text-align: left;
+	font-size: 15px;
+	padding: 7px 16px;
+	width: 370px;
+	margin: 20px auto 0 auto;
+	font-family: Helvetica Neue, Helvetica, sans-serif;
+	display: block;
+	clear: both;
+	background: rgba(32,108,157,0.6);
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+
+h2 em {
+	font-weight: 300;
+	font-style: normal;
+}
+
+table {
+	text-align: left;
+	width: 402px;
+	font: 12px/16px Arial, sans-serif;
+	margin: 0 0 0px 0;
+	background: #fff;
+	-webkit-box-shadow: 0 1px 2px #90BDD4;
+	-moz-box-shadow: 0 1px 2px #90BDD4;
+	color: #999;
+	border-bottom: 1px solid #eee;
+}
+
+table td, table th {
+	padding: 7px 16px;
+	width: 50%;
+	vertical-align: top;
+	cursor: default;
+}
+
+table tr th {
+	background: #f8f8f8;
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #eee;
+	color: #333;
+}
+
+table tr {
+	border-bottom: 1px solid #f4f4f4;
+}
+
+table tr td {
+	border-bottom: 1px solid #f4f4f4;
+}
+
+table tr td span {
+	color: #ccc;
+}
+
+table tr td strong {
+	color: #206C9D;
+}
+
+table tr.active td {
+	background: #FFFFEB;
+	color: #333;
+}
+
+table tr td.desc {
+	color: #666;
+	font-size: 11px;
+	line-height: 15px;
+}
+
+table tr.active td.desc {
+	color: #333;
+}

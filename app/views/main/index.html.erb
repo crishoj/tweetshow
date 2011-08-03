@@ -1,0 +1,53 @@
+<div id="container">
+  <div id="frontpage">
+    <img id="logo" src="images/tweetshow.png" alt="tweetshow.nu">
+    <p>Flip through your tweets as a slideshow</p>
+    <div id="connect">
+      <span class="loading"><img src="images/dots.gif" title="Loading..."></span>
+      <span id="connectButton"></span>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="mainTpl">
+  <nav id="menu">
+    <ul class="adxm menu">
+      <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
+      <li class="toplevel item3"><a href="/public" id="signout">Log out</a></li>
+    </ul>
+  </nav>
+  <div id="contentarea">
+  </div>
+  <footer id="footer">
+    <button type="button" disabled="true" class="buttonnext disabled">Next</button>
+    <button type="button" disabled="true" class="buttonnew disabled">New<br><span class="count">0</span></button>
+    <div id="footerarea">
+    </div>
+    <button type="button" disabled="true" class="buttonprevious disabled">Previous</button>
+  </footer>
+</script>
+
+<script type="text/html" id="tweetTpl">
+  <div class="tweet" id="tweet">
+    {{#user}}
+    <img class="profile" src="{{profileImageUrl}}" width="48" height="48" alt="@{{screenName}}">
+    <p class="name">@{{screenName}}</p>
+    {{/user}}
+    <p class="text">{{text}}</p>
+    <p class="meta">
+      <i class="bird"></i>
+      <abbr class="timeago" title="{{createdAtISO}}">{{createdAt}}</abbr> via {{{source}}}
+        <span class="actions">
+            <a href="#" class="favorite" title="Favorite"><span><i></i><b>Favorite</b></span></a>
+            <a href="#" class="retweet" title="Retweet"><span><i></i><b>Retweet</b></span></a>
+            <a href="http://twitter.com/intent/tweet?in_reply_to={{id}}" class="reply" title="Reply"><span><i></i><b>Reply</b></span></a>
+        </span>
+    </p>
+  </div>
+</script>
+
+<script type="text/html" id="previewTpl">
+  <iframe src="{{href}}" class="preview">
+    <p>Buggers, your browser does not support iframes :|</p>
+  </iframe>
+</script>

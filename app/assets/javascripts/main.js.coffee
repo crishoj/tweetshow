@@ -1,4 +1,3 @@
-
 window.Tweetshow =
 
   init: ->
@@ -49,9 +48,16 @@ window.Tweetshow =
     window.setTimeout (=> @fetchNew()), @fetchInterval
 
   registerHashtagLinkifier: ->
+    charCodes = [
+      192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212,
+      213, 214, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234,
+      235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 248, 249, 250, 251, 252, 253, 254, 277, 303,
+    ]
+    chars = (String.fromCharCode(code) for code in charCodes).join('')
+    hashChars = ['#', String.fromCharCode(65283)].join('|')
     $.extend $.fn.linkify.plugins, 
       twitterHashtag: 
-        re: new RegExp('(^|[^0-9A-Z&\\/]+)(#|＃)([0-9A-Z_]*[A-Z_]+[a-z0-9_ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþ\\303\\277]*)', 'ig')
+        re: new RegExp("(^|[^0-9a-z&\\/]+)(#{hashChars})([0-9a-z_]*[a-z_]+[a-z0-9_#{chars}]*)", 'ig')
         tmpl: (match, pre, hash, tag) -> pre + """
           <a href="http://twitter.com/search?q=%23#{tag}" title="\##{tag}">#{hash+tag}</a>
         """
@@ -127,7 +133,6 @@ window.Tweetshow =
 
   fetchNew: ->
     @trackEvent('api', 'fetchNew')
-    #@debug("fetching new since #{@statuses[0]}")
     @timelineCallback
       count: @fetchCount
       since_id: @statuses[0].id()
@@ -261,6 +266,8 @@ window.Tweetshow =
     return unless console?
     console.log messages.join(' ')
 
+
+
 class Status
 
   constructor: (@status) ->
@@ -270,7 +277,7 @@ class Status
     # Monkey patch
     @status.id = @status.idStr
     @status.attributes.id = @status.attributes.id_str
-    @status.createdAtISO = new Date(status.createdAt).toISOString()      
+    @status.createdAtISO = new Date(status.createdAt).toISOString()
     @render()
 
   id: ->
@@ -282,7 +289,7 @@ class Status
       @renderedStatus.find('.text')
         .linkify
           use: []
-          handleLinks: (links) => 
+          handleLinks: (links) =>
             @links = links.addClass('url').attr('target', '_blank')
             @link = @links[@links.length - 1] if @links.length > 0
         .linkify
@@ -320,4 +327,7 @@ class Status
   toString: ->
     "#{@status.id}/#{@status.text[0..10]} (#{@status.createdAt})"
 
+
+
 $(document).ready -> Tweetshow.init()
+
