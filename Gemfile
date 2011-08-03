@@ -19,6 +19,8 @@ gem 'rails', '3.1.0.rc5'
 gem 'capistrano'
 gem 'capistrano-ext'
 
+gem 'rvm'
+gem 'therubyracer'
 
 # To use debugger
 gem 'ruby-debug19', :require => 'ruby-debug'
