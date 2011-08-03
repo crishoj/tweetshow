@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'rails/all'
+require "action_controller/railtie"
+require "rails/test_unit/railtie"
 
 # If you have a Gemfile, require the default gems, the ones in the
 # current environment and also include :assets gems if in development
@@ -39,6 +40,7 @@ module Tweetshow
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    config.assets.compress = true
 
   end
 end
