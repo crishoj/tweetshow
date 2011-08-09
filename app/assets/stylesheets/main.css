@@ -136,9 +136,6 @@ body { background-color:#e8e8e8; margin:0px 24px 24px 24px; }
 }
 .submit:hover { background-image:url("../images/button-submit-hover.png"); }
 
-/* *********
-   STYLES
-********** */
 header {
     position:relative; 
     height:24px;
@@ -297,21 +294,15 @@ nav#menu  	{
         if you do it, make sure you 110% know what you do */
 .menu ul {
     background-image: url("../images/blank.png");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
-    padding: 0px 0px 30px 30px;
-    margin: 0px 0 0 -30px;
-    /*background: #f00;	*//* uncomment this if you want to see the "safe" area.
-                                                            you can also use to adjust the safe area to your requirement */
+    /*background: #f00;*/
+    /* uncomment this if you want to see the "safe" area.
+       you can also use to adjust the safe area to your requirement */
 }
 .menu ul ul {
     padding: 30px 30px 30px 10px;
     margin: -30px 0 0 -10px;
 }
 /* -- sticky.submenu.END -- */
-
-
-
-
-
 
 /* - - - DESIGN styles - - - */
 .menu, .menu ul li { }
@@ -346,7 +337,7 @@ nav#menu  	{
 .menu li li {	/* create borders around each item */
     border-top:0px;
     left:-1px;
-    min-width:156px;
+    min-width:100px;
     background-color:#fff;
 }
 .menu li li a, .menu li li a:link, .menu li li a:visited, .menu li li a:hover, .menu li li a:active  {
@@ -402,23 +393,11 @@ nav#menu  	{
 
 .menu .item2, .menu .item4 { background:url("../images/icon-arrow-down.png") right 10px no-repeat #fff; }
 
-
-
 .menu .item2 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-digital.png") 0px -36px no-repeat #fff;  }
 .menu .item2 ul>li:first-child a:hover { background-position:0px 0px; }
 
 .menu .item4 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-slideshow.png") 0px -36px no-repeat #fff;  }
 .menu .item4 ul>li:first-child a:hover { background-position:0px 0px; }
-
-/* Fix for IE5/Mac \*//*/
-.menu a {
-        float: left;
-}
-/* End Fix */
-
-
-
-
 
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
 .hidden { display: none; visibility: hidden; }

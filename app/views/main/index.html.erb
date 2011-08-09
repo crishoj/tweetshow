@@ -12,8 +12,12 @@
 <script type="text/html" id="mainTpl">
   <nav id="menu">
     <ul class="adxm menu">
-      <li class="toplevel item1"><a href="http://www.twitter.com/{{screenName}}">{{screenName}} /</a></li>
-      <li class="toplevel item3"><a href="/public" id="signout">Log out</a></li>
+      <li class="toplevel item1"><a id="home" title="Go to home timeline">{{screenName}} /</a></li>
+      <li class="toplevel item2">
+        <a id="timeline"></a>
+        <ul id="lists"></ul>
+      </li>
+      <li class="toplevel item3"><a href="/signout" id="signout">Log out</a></li>
     </ul>
   </nav>
   <div id="contentarea">

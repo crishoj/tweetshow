@@ -40,7 +40,6 @@ module Tweetshow
 
     # Enable the asset pipeline
     config.assets.enabled = true
-    config.assets.compress = true
 
   end
 end
