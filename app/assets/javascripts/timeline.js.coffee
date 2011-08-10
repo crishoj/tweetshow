@@ -42,8 +42,6 @@ window.tsw.Timeline = class
       @statuses.unshift(status)
       @curIdx++
       @newCount++
-      $(".buttonnew .count").text(@newCount)
-      tsw.App.enableButton $('.buttonnew'), => @showNew()
     else
       @statuses.push(status)
     tsw.App.handleReceived()

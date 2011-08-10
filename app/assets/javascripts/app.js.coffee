@@ -85,6 +85,8 @@ window.tsw.App =
   updateButtons: ->
     @toggleButton @timeline.hasPrevious(), $('.buttonprevious'), => @previous()
     @toggleButton @timeline.hasNext(), $('.buttonnext'), => @next()
+    @toggleButton (@timeline.newCount > 0), $('.buttonnew'), => @showNew()
+    $(".buttonnew .count").text @timeline.newCount
 
   retweet: ->
     @status.retweet()
@@ -167,9 +169,9 @@ window.tsw.App =
       @trackEvent('status', 'open')
 
   showNew: ->
-    if @newCount > 0
+    if @timeline.newCount > 0
       @changeStatus 0
-      @newCount = 0
+      @timeline.newCount = 0
       @trackEvent('status', 'new')
 
   clearNew: ->
