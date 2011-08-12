@@ -25,4 +25,5 @@ Tweetshow::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
+  config.twitter_consumer_key = 'IEK7rpgJh9c8H1OSmFXF9A'
 end

@@ -50,4 +50,6 @@ Tweetshow::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  config.twitter_consumer_key = 'll2W2dyJpCHr4bhbZ9IwlQ'
 end
