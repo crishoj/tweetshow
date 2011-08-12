@@ -99,7 +99,19 @@ body { background-color:#e8e8e8; margin:0px 24px 24px 24px; }
     border:1px solid red;
 }
 
-#frontpage { position:absolute; top:50%; left:50%; width:830px; height:420px; margin:-110px 0 0 -415px; text-align:center; }
+#frontpage {
+    position:absolute;
+    top:50%; left:50%;
+    width:830px; height:420px;
+    margin:-110px 0 0 -415px;
+    text-align:center;
+}
+
+#like {
+    bottom: -15px;
+    position: absolute;
+    margin: 10px;
+}
 
 #logo { margin-bottom: 9px; }
 
