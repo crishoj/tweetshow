@@ -45,9 +45,12 @@ window.tsw.App =
       .live('mouseleave', -> $('#tweet .actions').stop(true, true).fadeOut(200))
     @user.lists (lists) =>
       @lists = lists
-      @lists.each (list) ->
-        $('#lists').append("<li><a listid=\"#{list.idStr}\">#{list.name}</a></li>")
-      $('#lists a').bind 'click', (event) => @handleListChange(event)
+      if @lists.length() > 0
+        @lists.each (list) ->
+          $('#lists').append("<li><a listid=\"#{list.idStr}\" title=\"Go to list #{list.name}\">#{list.name}</a></li>")
+        $('#lists a').bind 'click', (event) => @handleListChange(event)
+      else
+        $('#listsItem').removeClass('dropdown')
 
   showTimeline: (timeline) ->
     @timeline = timeline

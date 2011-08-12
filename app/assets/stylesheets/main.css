@@ -288,26 +288,8 @@ nav#menu  	{
 }
 /* -- float.clear.END --  */
 
-/* -- sticky.submenu --
-        it should not disappear when your mouse moves a bit outside the submenu
-        YOU SHOULD NOT STYLE the background of the ".menu UL" or this feature may not work properly!
-        if you do it, make sure you 110% know what you do */
-.menu ul {
-    background-image: url("../images/blank.png");	/* required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
-    /*background: #f00;*/
-    /* uncomment this if you want to see the "safe" area.
-       you can also use to adjust the safe area to your requirement */
-}
-.menu ul ul {
-    padding: 30px 30px 30px 10px;
-    margin: -30px 0 0 -10px;
-}
-/* -- sticky.submenu.END -- */
-
-/* - - - DESIGN styles - - - */
-.menu, .menu ul li { }
-.menu ul 	{ text-align:left; }
-
+/* Menu */
+.menu ul { text-align:left; }
 .menu a, .menu a:link, .menu a:visited, .menu a:hover, .menu a:active  {
     white-space:nowrap;
     display:block;
@@ -325,18 +307,14 @@ nav#menu  	{
     padding-right:10px;
     margin:0px;
 }
-
 .menu a:hover, .menu li:hover>a {
     color:#666;
     cursor:pointer;
     text-decoration:none;
 }
-
-.menu a:hover { color: #000;text-decoration:none; }
-
+.menu a:hover { color: #000; text-decoration:none; }
 .menu li li {	/* create borders around each item */
     border-top:0px;
-    left:-1px;
     min-width:100px;
     background-color:#fff;
 }
@@ -347,24 +325,13 @@ nav#menu  	{
     font-size:10px;
     line-height:18px;
     letter-spacing:0;
-    border-left:1px solid #909090;
-    border-right:1px solid #909090;
     background-color:#fff;
 }
 .menu li li a:hover {
     color:#000;
     background-color:#e4ffec;
 }
-
-.menu ul>li + li {	/* and remove the top border on all but first item in the list */
-    border-top:0px;
-}
-
-.menu li li:hover>ul {	/* inset 2nd+ submenus, to show off overlapping */
-    top:5px;
-    left:90%;
-}
-.menu .toplevel {
+.menu > li {
     height:24px;
     text-align:center;
     border-left:1px solid #e8e8e8;
@@ -372,32 +339,19 @@ nav#menu  	{
     display:table-cell;
     vertical-align:middle;
 }
+#userItem { width:250px; border:0px; }
+#userItem a { text-align:right; }
+.menu li { background-color:#fff; }
+.menu > li.inactive { background: none; }
+.menu > li:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
+.menu > li.inactive:hover { border-left: none; border-right: none; }
+.menu > li.dropdown { background:url("../images/icon-arrow-down.png") right 8px no-repeat #fff; padding-right: 18px; }
+.menu > li.dropdown > a { margin-right: -6px; }
+.menu > li.dropdown:hover { height: 23px; border-bottom: 1px solid #909090; }
 
-.menu .item3>a:first-child, .menu .item4>a:first-child, .menu .item5>a:first-child {
-}
-.menu .item1 a, .menu .item1 a:link, .menu .item1 a:visited, .menu .item1 a:hover, .menu .item1 a:active  {
-    border-left:0px;
-}
-
-.menu .item1 { width:250px; border:0px; }
-.menu .item1 a { text-align:right; }
-.menu .item2 { width:60px; }
-.menu li.item2 li:last-child { border-bottom:1px solid #909090; z-index:100; }
-.menu .item2:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
-.menu .item3 { width:55px; background-color:#fff; }
-.menu .item3:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
-.menu .item4 { width:105px; }
-.menu .item4:hover { border-left:1px solid #909090; border-right:1px solid #909090; }
-.menu li.item4 li { margin-left:-49px; }
-.menu li.item4 li:last-child { border-bottom:1px solid #909090;}
-
-.menu .item2, .menu .item4 { background:url("../images/icon-arrow-down.png") right 10px no-repeat #fff; }
-
-.menu .item2 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-digital.png") 0px -36px no-repeat #fff;  }
-.menu .item2 ul>li:first-child a:hover { background-position:0px 0px; }
-
-.menu .item4 ul>li:first-child a { padding-top:5px; background:url("../images/submenu-slideshow.png") 0px -36px no-repeat #fff;  }
-.menu .item4 ul>li:first-child a:hover { background-position:0px 0px; }
+/* Sub-menu */
+.menu .dropdown ul { border: 1px solid #909090; border-top: 1px solid #D8D8D8; margin-left: -1px; }
+.menu .dropdown ul>li:first-child a { border-top: 4px solid #eeeeee; }
 
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
 .hidden { display: none; visibility: hidden; }
