@@ -136,7 +136,7 @@ window.tsw.App =
   preload: ->
     keep = []
     preloading = false
-    for idx in [@timeline.curIdx-1...@timeline.curIdx+3]
+    for idx in [@timeline.curIdx...@timeline.curIdx+3]
       break if keep.length >= 3
       candidate = @timeline.statuses[idx]
       continue unless candidate?
