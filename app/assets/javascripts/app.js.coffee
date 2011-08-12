@@ -105,7 +105,7 @@ window.tsw.App =
       $('#tweet .actions a.favorite b').text('Favorite')
 
   showStatus: (@status) ->
-    if @status.link?
+    if @status.link? and @status.link.href.indexOf('tweetshow.nu') < 0
       # Display tweet in footer, preview of last link as content
       $('#footerarea').html @status.render()
       if @status.previewLoaded()
