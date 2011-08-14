@@ -29,11 +29,11 @@ window.tsw.App =
       $(document).bind 'keyup', key, => 
         @trackEvent('ui', 'key', key)
         @open() 
-    for key in ['right', 'j', 'space']
+    for key in ['right', 'j']
       $(document).bind 'keyup', key, => 
         @trackEvent('ui', 'key', key)
         @previous() 
-    for key in ['left', 'k', 'backspace']
+    for key in ['left', 'k']
       $(document).bind 'keyup', key, => 
         @trackEvent('ui', 'key', key)
         @next() 
